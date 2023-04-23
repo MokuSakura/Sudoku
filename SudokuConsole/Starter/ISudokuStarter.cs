@@ -1,6 +1,4 @@
-using MokuSakura.Sudoku.Game;
-
-namespace MokuSakura.Sudoku.Starter;
+namespace MokuSakura.SudokuConsole.Starter;
 
 public interface ISudokuStarter
 {

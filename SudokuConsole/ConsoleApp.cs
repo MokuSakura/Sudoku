@@ -1,9 +1,7 @@
 using log4net;
-using MokuSakura.Sudoku.Game;
-using MokuSakura.Sudoku.Requirement;
-using MokuSakura.Sudoku.Starter;
+using MokuSakura.SudokuConsole.Starter;
 
-namespace MokuSakura.Sudoku;
+namespace MokuSakura.SudokuConsole;
 
 public sealed class ConsoleApp
 {

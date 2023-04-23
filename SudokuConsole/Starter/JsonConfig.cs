@@ -1,4 +1,4 @@
-namespace MokuSakura.Sudoku.Starter;
+namespace MokuSakura.SudokuConsole.Starter;
 
 public class JsonConfig
 {

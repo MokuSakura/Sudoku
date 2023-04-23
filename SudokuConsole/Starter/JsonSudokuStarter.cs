@@ -1,13 +1,6 @@
 using log4net;
-using MokuSakura.Sudoku.Game;
-using MokuSakura.Sudoku.Requirement;
-using MokuSakura.Sudoku.Setting;
-using MokuSakura.Sudoku.Solver;
-using MokuSakura.Sudoku.Util;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace MokuSakura.Sudoku.Starter;
+namespace MokuSakura.SudokuConsole.Starter;
 
 public class JsonSudokuStarter : ISudokuStarter
 {
