@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku", ".\SudokuCore\Sudoku.csproj", "{66158DFD-B5BA-4AC2-9781-5182931EAB19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuCore", "SudokuCore\SudokuCore.csproj", "{66158DFD-B5BA-4AC2-9781-5182931EAB19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuWpf", ".\SudokuWpf\SudokuWpf.csproj", "{0EAE5ED6-B3C4-4915-AEF0-484510F98658}"
 EndProject
