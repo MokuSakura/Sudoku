@@ -5,8 +5,9 @@ namespace MokuSakura.Sudoku.Requirement;
 
 public interface IRequirement
 {
-    public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num);
+    public String RegisterName => this.GetType().Name;
 
+    public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num);
     public void Init(ISudokuGame sudokuGame)
     {
     }

@@ -43,21 +43,6 @@ public class SudokuGame : ISudokuGame
         return res;
     }
 
-    public Int32 GetRowIdx(ICoordination coordination)
-    {
-        return coordination.X;
-    }
-
-    public Int32 GetColIdx(ICoordination coordination)
-    {
-        return coordination.Y;
-    }
-
-    public Int32 GetSubGridIdx(ICoordination coordination)
-    {
-        return coordination.X / SubGridSizeX * SubGridSizeX + coordination.Y / SubGridSizeY;
-    }
-
     public Int32 GetNum(ICoordination coordination)
     {
         return GameBoard[coordination.X, coordination.Y];

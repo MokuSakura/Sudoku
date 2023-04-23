@@ -9,7 +9,7 @@ public class RowRequirement : IRequirement
 
     public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
     {
-        return !Cache[sudokuGame.GetRowIdx(coordination), num];
+        return !Cache[coordination.X, num];
     }
 
     public void Init(ISudokuGame sudokuGame)
@@ -19,7 +19,7 @@ public class RowRequirement : IRequirement
         {
             ICoordination coordination = sudokuGame.MapIndexToCoordination(i);
             Int32 num = sudokuGame.GetNum(coordination);
-            Int32 rowIdx = sudokuGame.GetRowIdx(coordination);
+            Int32 rowIdx = coordination.X;
             if (num != 0)
             {
                 Cache[rowIdx, num] = true;
@@ -29,11 +29,11 @@ public class RowRequirement : IRequirement
 
     public void Step(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
     {
-        Cache[sudokuGame.GetRowIdx(coordination), num] = true;
+        Cache[coordination.X, num] = true;
     }
 
     public void RollBack(ISudokuGame sudokuGame, ICoordination coordination)
     {
-        Cache[sudokuGame.GetRowIdx(coordination), sudokuGame.GetNum(coordination)] = false;
+        Cache[coordination.X, sudokuGame.GetNum(coordination)] = false;
     }
 }

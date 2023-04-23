@@ -7,9 +7,11 @@ using MokuSakura.Sudoku.Util;
 
 namespace MokuSakura.Sudoku.Starter;
 
-public class SimpleConsoleStarter
+public class SimpleConsoleStarter : ISudokuStarter
 {
-    public static void Main(String[] args)
+    public String RegisterName => "SimpleConsoleStarter";
+
+    public void Run(String[] args)
     {
         SudokuSetting setting = new();
         ISudokuGame sudokuGame = new SudokuGame(setting);
@@ -36,11 +38,13 @@ public class SimpleConsoleStarter
         {
             Console.Error.WriteLine("No Solution");
         }
+
         foreach (ISudokuGame res in sudokuGames)
         {
             Console.Out.WriteLine("Res:");
             res.PrintGameBoard(Console.Out);
         }
+
         Console.Out.WriteLine($"Time used: {(t2 - t1).Milliseconds}ms");
     }
 }
