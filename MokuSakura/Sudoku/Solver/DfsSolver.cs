@@ -9,12 +9,12 @@ public class DfsSolver : ISolver
     public ICollection<ISudokuGame> Solve(ISudokuGame sudokuGame, RequirementChain requirement)
     {
         requirement.Init(sudokuGame);
-        ICollection<ISudokuGame> res = new List<ISudokuGame>();
+        List<ISudokuGame> res = new List<ISudokuGame>();
         DfsBody(sudokuGame, requirement, 0, res);
         return res;
     }
 
-    private void DfsBody(ISudokuGame sudokuGame, RequirementChain requirement, Int32 n, ICollection<ISudokuGame> res)
+    private void DfsBody(ISudokuGame sudokuGame, RequirementChain requirement, Int32 n, List<ISudokuGame> res)
     {
         if (n >= sudokuGame.NumToFill)
         {
