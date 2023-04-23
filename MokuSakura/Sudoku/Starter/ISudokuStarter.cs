@@ -2,6 +2,7 @@ namespace MokuSakura.Sudoku.Starter;
 
 public interface ISudokuStarter
 {
-    public String RegisterName => this.GetType().Name;
-    public void Run(String[] args);
+    public ICollection<String> RegisterName => new[] { GetType().Name };
+
+    public void Run(IDictionary<String, Object> args);
 }

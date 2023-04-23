@@ -11,7 +11,7 @@ public class SimpleConsoleStarter : ISudokuStarter
 {
     public String RegisterName => "SimpleConsoleStarter";
 
-    public void Run(String[] args)
+    public void Run(IDictionary<String, Object> args)
     {
         SudokuSetting setting = new();
         ISudokuGame sudokuGame = new SudokuGame(setting);

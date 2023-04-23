@@ -2,9 +2,9 @@ namespace MokuSakura.Sudoku.Starter;
 
 public class JsonSudokuStarter : ISudokuStarter
 {
-    public String RegisterName => "JsonStarter";
+    public ICollection<String> RegisterName => new[] { GetType().Name, "J", "j", "json", "JsonStarter" };
 
-    public void Run(String[] args)
+    public void Run(IDictionary<String, Object> args)
     {
         
     }
