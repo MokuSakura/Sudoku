@@ -1,5 +1,3 @@
-
-
 using MokuSakura.Sudoku.Coordination;
 
 namespace MokuSakura.Sudoku.Game;

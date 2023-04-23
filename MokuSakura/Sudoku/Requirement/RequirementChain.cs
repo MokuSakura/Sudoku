@@ -5,7 +5,7 @@ namespace MokuSakura.Sudoku.Requirement;
 
 public class RequirementChain : IRequirement
 {
-    protected ICollection<IRequirement> Requirements { get; init; }
+    public IList<IRequirement> Requirements { get; init; }
 
     public RequirementChain(ICollection<IRequirement> requirements)
     {

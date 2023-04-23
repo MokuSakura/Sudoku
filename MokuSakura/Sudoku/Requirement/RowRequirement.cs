@@ -5,7 +5,7 @@ namespace MokuSakura.Sudoku.Requirement;
 
 public class RowRequirement : IRequirement
 {
-    protected Boolean[,] Cache { get; set; } = new Boolean[0, 0];
+    protected Boolean[,] Cache { get; set; } = { };
 
     public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
     {

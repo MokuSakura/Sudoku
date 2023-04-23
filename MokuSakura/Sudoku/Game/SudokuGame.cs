@@ -16,9 +16,13 @@ public class SudokuGame : ISudokuGame
     public ISet<Int32> AvailableSet { get; }
     public Int32 NumToFill { get; }
 
-    public SudokuGame(SudokuSetting sudokuSetting)
+    public SudokuGame(SudokuSetting sudokuSetting) : this(sudokuSetting, new Int32[sudokuSetting.GameBoardSizeX, sudokuSetting.GameBoardSizeY])
     {
-        GameBoard = new Int32[sudokuSetting.GameBoardSizeX, sudokuSetting.GameBoardSizeY];
+    }
+
+    public SudokuGame(SudokuSetting sudokuSetting, Int32[,] gameBoard)
+    {
+        GameBoard = gameBoard;
         AvailableSet = ImmutableHashSet<Int32>.Empty.Union(sudokuSetting.AvailableSet);
         RowNum = sudokuSetting.GameBoardSizeX;
         ColNum = sudokuSetting.GameBoardSizeY;
@@ -82,6 +86,7 @@ public class SudokuGame : ISudokuGame
                 sb.Append('\t')
                     .Append(GameBoard[i, j]);
             }
+
             writer.WriteLine(sb);
             sb.Clear();
         }

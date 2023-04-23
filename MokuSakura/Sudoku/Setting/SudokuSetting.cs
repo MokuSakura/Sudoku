@@ -1,5 +1,3 @@
-using System.Collections.Immutable;
-
 namespace MokuSakura.Sudoku.Setting;
 
 public class SudokuSetting

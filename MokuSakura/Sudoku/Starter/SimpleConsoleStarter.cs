@@ -11,7 +11,7 @@ public class SimpleConsoleStarter : ISudokuStarter
 {
     public String RegisterName => "SimpleConsoleStarter";
 
-    public void Run(IDictionary<String, Object> args)
+    public ICollection<ISudokuGame> Run()
     {
         SudokuSetting setting = new();
         ISudokuGame sudokuGame = new SudokuGame(setting);
@@ -46,5 +46,6 @@ public class SimpleConsoleStarter : ISudokuStarter
         }
 
         Console.Out.WriteLine($"Time used: {(t2 - t1).Milliseconds}ms");
+        return sudokuGames;
     }
 }
