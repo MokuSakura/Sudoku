@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace MokuSakura.Sudoku.Util;
+namespace MokuSakura.Sudoku.Core.Util;
 
 public class Scanner : StreamReader
 {

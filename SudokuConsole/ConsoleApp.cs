@@ -1,4 +1,6 @@
 using log4net;
+using MokuSakura.Sudoku.Core.Game;
+using MokuSakura.Sudoku.Core.Requirement;
 using MokuSakura.SudokuConsole.Starter;
 
 namespace MokuSakura.SudokuConsole;

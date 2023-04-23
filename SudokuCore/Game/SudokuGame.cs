@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
 using System.Text;
-using MokuSakura.Sudoku.Coordination;
-using MokuSakura.Sudoku.Setting;
+using MokuSakura.Sudoku.Core.Coordination;
+using MokuSakura.Sudoku.Core.Setting;
 
-namespace MokuSakura.Sudoku.Game;
+namespace MokuSakura.Sudoku.Core.Game;
 
 public class SudokuGame : ISudokuGame
 {

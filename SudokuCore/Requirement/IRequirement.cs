@@ -1,7 +1,7 @@
-using MokuSakura.Sudoku.Coordination;
-using MokuSakura.Sudoku.Game;
+using MokuSakura.Sudoku.Core.Coordination;
+using MokuSakura.Sudoku.Core.Game;
 
-namespace MokuSakura.Sudoku.Requirement;
+namespace MokuSakura.Sudoku.Core.Requirement;
 
 public interface IRequirement
 {

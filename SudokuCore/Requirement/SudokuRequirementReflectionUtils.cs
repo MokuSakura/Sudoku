@@ -1,7 +1,7 @@
 using System.Reflection;
 using log4net;
 
-namespace MokuSakura.Sudoku.Requirement;
+namespace MokuSakura.Sudoku.Core.Requirement;
 
 public class SudokuRequirementReflectionUtils
 {

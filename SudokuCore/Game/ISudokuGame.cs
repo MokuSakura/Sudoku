@@ -1,6 +1,6 @@
-using MokuSakura.Sudoku.Coordination;
+using MokuSakura.Sudoku.Core.Coordination;
 
-namespace MokuSakura.Sudoku.Game;
+namespace MokuSakura.Sudoku.Core.Game;
 
 public interface ISudokuGame
 {

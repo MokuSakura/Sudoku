@@ -4,8 +4,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>MokuSakura.Sudoku</AssemblyName>
-        <RootNamespace>MokuSakura.Sudoku</RootNamespace>
+        <AssemblyName>MokuSakura.Sudoku.Core</AssemblyName>
+        <RootNamespace>MokuSakura.Sudoku.Core</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

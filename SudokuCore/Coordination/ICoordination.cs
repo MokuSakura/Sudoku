@@ -1,4 +1,4 @@
-namespace MokuSakura.Sudoku.Coordination;
+namespace MokuSakura.Sudoku.Core.Coordination;
 
 public interface ICoordination
 {

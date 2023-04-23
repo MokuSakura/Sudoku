@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 
-namespace MokuSakura.Sudoku.Util;
+namespace MokuSakura.Sudoku.Core.Util;
 
 /// <summary>
 /// JObject扩展

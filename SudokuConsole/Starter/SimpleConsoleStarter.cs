@@ -1,3 +1,10 @@
+using MokuSakura.Sudoku.Core.Coordination;
+using MokuSakura.Sudoku.Core.Game;
+using MokuSakura.Sudoku.Core.Requirement;
+using MokuSakura.Sudoku.Core.Setting;
+using MokuSakura.Sudoku.Core.Solver;
+using MokuSakura.Sudoku.Core.Util;
+
 namespace MokuSakura.SudokuConsole.Starter;
 
 public class SimpleConsoleStarter : ISudokuStarter

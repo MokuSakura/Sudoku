@@ -1,8 +1,8 @@
-using MokuSakura.Sudoku.Coordination;
-using MokuSakura.Sudoku.Game;
-using MokuSakura.Sudoku.Requirement;
+using MokuSakura.Sudoku.Core.Coordination;
+using MokuSakura.Sudoku.Core.Game;
+using MokuSakura.Sudoku.Core.Requirement;
 
-namespace MokuSakura.Sudoku.Solver;
+namespace MokuSakura.Sudoku.Core.Solver;
 
 public class DfsSolver : ISolver
 {

@@ -21,4 +21,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SudokuCore\Sudoku.csproj" />
+    </ItemGroup>
+
 </Project>

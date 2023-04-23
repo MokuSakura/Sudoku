@@ -1,4 +1,4 @@
-namespace MokuSakura.Sudoku.Setting;
+namespace MokuSakura.Sudoku.Core.Setting;
 
 public class SudokuSetting
 {
