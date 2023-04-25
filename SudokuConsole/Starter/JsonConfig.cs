@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Linq;
+
 namespace MokuSakura.SudokuConsole.Starter;
 
 public class JsonConfig
@@ -18,5 +20,5 @@ public class RequirementConfig
     }
 
     public String RequirementName { get; set; } = "";
-    public String Configuration { get; set; } = "{}";
+    public JObject Configuration { get; set; } = new JObject();
 }

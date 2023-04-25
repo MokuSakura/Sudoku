@@ -1,9 +1,9 @@
 using MokuSakura.Sudoku.Core.Coordination;
 using MokuSakura.Sudoku.Core.Game;
 
-namespace MokuSakura.Sudoku.Core.Requirement;
+namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class ColRequirement : IRequirement
+public class ColRequirement : IRequirement<Object>
 {
     protected Boolean[,] Cache { get; set; } = { };
 
