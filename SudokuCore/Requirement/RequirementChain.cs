@@ -24,6 +24,7 @@ public class RequirementChain : IRequirement<Object>
         public Func<ISudokuGame, ICoordination, Int32, Boolean> FitRequirementDelegate { get; init; }
         public Action<ISudokuGame, ICoordination, Int32> StepDelegate { get; init; }
         public Action<ISudokuGame, ICoordination> RollBackDelegate { get; init; }
+        public Action<ISudokuGame> InitDelegate { get; init; }
     }
 
     protected List<RequirementMethods> Requirements { get; init; }
@@ -48,13 +49,15 @@ public class RequirementChain : IRequirement<Object>
             MethodInfo rollbackMethod = GetMethodOrDefault(instanceType, interfaceType, "RollBack", new[] { typeof(ISudokuGame), typeof(ICoordination) })!;
             MethodInfo steptMethod = GetMethodOrDefault(instanceType, interfaceType, "Step",
                 new[] { typeof(ISudokuGame), typeof(ICoordination), typeof(Int32) })!;
-            Func<ISudokuGame, ICoordination, Int32, Boolean> fitRequirementDelegate =(Func<ISudokuGame, ICoordination, Int32, Boolean>)
+            Func<ISudokuGame, ICoordination, Int32, Boolean> fitRequirementDelegate = (Func<ISudokuGame, ICoordination, Int32, Boolean>)
                 Delegate.CreateDelegate(typeof(Func<ISudokuGame, ICoordination, Int32, Boolean>), requirement, fitRequirementMethod);
-            Action<ISudokuGame, ICoordination, Int32> stepDelegate =(Action<ISudokuGame, ICoordination, Int32>)
+            Action<ISudokuGame, ICoordination, Int32> stepDelegate = (Action<ISudokuGame, ICoordination, Int32>)
                 Delegate.CreateDelegate(typeof(Action<ISudokuGame, ICoordination, Int32>), requirement, steptMethod);
-            Action<ISudokuGame, ICoordination> rollBackDelegate =(Action<ISudokuGame, ICoordination>)
+            Action<ISudokuGame, ICoordination> rollBackDelegate = (Action<ISudokuGame, ICoordination>)
                 Delegate.CreateDelegate(typeof(Action<ISudokuGame, ICoordination>), requirement, rollbackMethod);
-            
+            Action<ISudokuGame> initDelegate = (Action<ISudokuGame>)
+                Delegate.CreateDelegate(typeof(Action<ISudokuGame>), requirement, initMethod);
+
             Requirements.Add(new RequirementMethods
             {
                 Requirement = requirement,
@@ -64,7 +67,8 @@ public class RequirementChain : IRequirement<Object>
                 Step = steptMethod,
                 FitRequirementDelegate = fitRequirementDelegate,
                 StepDelegate = stepDelegate,
-                RollBackDelegate = rollBackDelegate
+                RollBackDelegate = rollBackDelegate,
+                InitDelegate = initDelegate
             });
         }
     }
@@ -90,7 +94,8 @@ public class RequirementChain : IRequirement<Object>
         foreach (var requirement in Requirements)
         {
             // requirement.Requirement.Init(sudokuGame);
-            requirement.Init.Invoke(requirement.Requirement, new Object?[] { sudokuGame });
+            // requirement.Init.Invoke(requirement.Requirement, new Object?[] { sudokuGame });
+            requirement.InitDelegate(sudokuGame);
         }
     }
 
