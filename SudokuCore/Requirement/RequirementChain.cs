@@ -11,7 +11,7 @@ public class RequirementChain : IRequirement<Object>
 
     private static MethodInfo? GetMethodOrDefault(Type instanceType, Type interfaceType, String name, Type[] argumentTypes)
     {
-        return instanceType.GetMethod(name, argumentTypes) ?? instanceType.GetMethod(name, argumentTypes);
+        return instanceType.GetMethod(name, argumentTypes) ?? interfaceType.GetMethod(name, argumentTypes);
     }
 
     protected struct RequirementMethods
@@ -21,9 +21,13 @@ public class RequirementChain : IRequirement<Object>
         public MethodInfo Init { get; init; }
         public MethodInfo Step { get; init; }
         public MethodInfo Rollback { get; init; }
+        public Func<ISudokuGame, ICoordination, Int32, Boolean> FitRequirementDelegate { get; init; }
+        public Action<ISudokuGame, ICoordination, Int32> StepDelegate { get; init; }
+        public Action<ISudokuGame, ICoordination> RollBackDelegate { get; init; }
     }
 
     protected List<RequirementMethods> Requirements { get; init; }
+
 
     public RequirementChain(ICollection<Object> requirements)
     {
@@ -44,19 +48,24 @@ public class RequirementChain : IRequirement<Object>
             MethodInfo rollbackMethod = GetMethodOrDefault(instanceType, interfaceType, "RollBack", new[] { typeof(ISudokuGame), typeof(ICoordination) })!;
             MethodInfo steptMethod = GetMethodOrDefault(instanceType, interfaceType, "Step",
                 new[] { typeof(ISudokuGame), typeof(ICoordination), typeof(Int32) })!;
-            // instanceType.GetMethod("FitRequirement", ) ??
-            // requirement.GetType().GetInterface("IRequirement`1")!.GetMethod("FitRequirement", new[] { typeof(ISudokuGame), typeof(ICoordination), typeof(Int32) })!;
-            // MethodInfo initMethod =
-            //     requirement.GetType().GetMethod("Init", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy,
-            //         new[] { typeof(ISudokuGame) }) ??;
-            // MethodInfo steptMethod =
-            //     requirement.GetType().GetMethod("Step", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy,
-            //         new[] { typeof(ISudokuGame), typeof(ICoordination), typeof(Int32) })!;
-            // MethodInfo rollbackMethod =
-            //     requirement.GetType().GetMethod("RollBack", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy,
-            // new[] { typeof(ISudokuGame), typeof(ICoordination) })!;
+            Func<ISudokuGame, ICoordination, Int32, Boolean> fitRequirementDelegate =(Func<ISudokuGame, ICoordination, Int32, Boolean>)
+                Delegate.CreateDelegate(typeof(Func<ISudokuGame, ICoordination, Int32, Boolean>), requirement, fitRequirementMethod);
+            Action<ISudokuGame, ICoordination, Int32> stepDelegate =(Action<ISudokuGame, ICoordination, Int32>)
+                Delegate.CreateDelegate(typeof(Action<ISudokuGame, ICoordination, Int32>), requirement, steptMethod);
+            Action<ISudokuGame, ICoordination> rollBackDelegate =(Action<ISudokuGame, ICoordination>)
+                Delegate.CreateDelegate(typeof(Action<ISudokuGame, ICoordination>), requirement, rollbackMethod);
+            
             Requirements.Add(new RequirementMethods
-                { Requirement = requirement, FitRequirement = fitRequirementMethod, Init = initMethod, Rollback = rollbackMethod, Step = steptMethod });
+            {
+                Requirement = requirement,
+                FitRequirement = fitRequirementMethod,
+                Init = initMethod,
+                Rollback = rollbackMethod,
+                Step = steptMethod,
+                FitRequirementDelegate = fitRequirementDelegate,
+                StepDelegate = stepDelegate,
+                RollBackDelegate = rollBackDelegate
+            });
         }
     }
 
@@ -65,7 +74,8 @@ public class RequirementChain : IRequirement<Object>
         Boolean res = true;
         foreach (var requirement in Requirements)
         {
-            res = res && (Boolean)requirement.FitRequirement.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num })!;
+            // res = res && (Boolean)requirement.FitRequirement.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num })!;
+            res = res && requirement.FitRequirementDelegate(sudokuGame, coordination, num);
             if (!res)
             {
                 break;
@@ -88,7 +98,8 @@ public class RequirementChain : IRequirement<Object>
     {
         foreach (var requirement in Requirements)
         {
-            requirement.Step.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num });
+            // requirement.Step.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num });
+            requirement.StepDelegate(sudokuGame, coordination, num);
         }
     }
 
@@ -96,7 +107,8 @@ public class RequirementChain : IRequirement<Object>
     {
         foreach (var requirement in Requirements)
         {
-            requirement.Rollback.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination });
+            // requirement.Rollback.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination });
+            requirement.RollBackDelegate(sudokuGame, coordination);
         }
     }
 }

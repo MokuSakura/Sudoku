@@ -20,17 +20,6 @@ public class SudokuRequirementReflectionUtils
         return null;
     }
 
-    public static Type[] GetGenericArguments(Type type, Type genericType)
-    {
-        return type.GetInterfaces() //取类型的接口
-            .Where(IsGenericType) //筛选出相应泛型接口
-            .SelectMany(i => i.GetGenericArguments()) //选择所有接口的泛型参数
-            .ToArray(); //ToArray
-
-        Boolean IsGenericType(Type type1)
-            => type1.IsGenericType && type1.GetGenericTypeDefinition() == genericType;
-    }
-
     private SudokuRequirementReflectionUtils()
     {
         Type requirementType = typeof(IRequirement<>);
@@ -42,8 +31,7 @@ public class SudokuRequirementReflectionUtils
                 {
                     continue;
                 }
-                Log.Debug($"{type.FullName}");
-                if (GetGenericArguments(type, requirementType).Length == 0)
+                if (type.GetInterface(requirementType.Name) == null)
                 {
                     continue;
                 }

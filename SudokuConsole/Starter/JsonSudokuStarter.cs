@@ -61,7 +61,7 @@ public class JsonSudokuStarter : ISudokuStarter
             // Type configType = requirementType.GetMethod("Configure", new Type[] { requirementType.GetInterfaces().Where(type => type.ContainsGenericParameters && ) });
 
             Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType)!;
-            Type makeGenericType =typeof(IRequirement<>).MakeGenericType(GetGenericArguments(requirementType, typeof(IRequirement<>)));
+            Type makeGenericType =typeof(IRequirement<>).MakeGenericType(configType);
             MethodInfo configureMethodInfo = makeGenericType.GetMethod("Configure")!;
             // requirementType.InvokeMember("Configure", BindingFlags.Instance | BindingFlags.InvokeMethod, null, requirement, new []{config});
             configureMethodInfo.Invoke(requirement, new[] { config });
