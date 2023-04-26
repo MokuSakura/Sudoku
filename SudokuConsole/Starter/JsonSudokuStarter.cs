@@ -1,5 +1,6 @@
 using System.Reflection;
 using log4net;
+using MokuSakura.Sudoku.Core.Coordination;
 using MokuSakura.Sudoku.Core.Game;
 using MokuSakura.Sudoku.Core.Requirement;
 using MokuSakura.Sudoku.Core.Setting;
@@ -9,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace MokuSakura.SudokuConsole.Starter;
 
-public class JsonSudokuStarter : ISudokuStarter
+public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
 {
     public IEnumerable<String> RegisterName => new[] { GetType().Name, "J", "j", "json", "JsonStarter" };
     private static ILog Log => LogManager.GetLogger(typeof(JsonSudokuStarter));
@@ -21,12 +22,12 @@ public class JsonSudokuStarter : ISudokuStarter
         this.Json = json;
     }
 
-    public ICollection<ISudokuGame> Run()
+    public ICollection<SudokuGame> Run()
     {
         return Run(out Int64 _);
     }
 
-    public ICollection<ISudokuGame> Run(out Int64 solveTime)
+    public ICollection<SudokuGame> Run(out Int64 solveTime)
     {
         JsonSerializerSettings settings = new()
         {
@@ -59,7 +60,7 @@ public class JsonSudokuStarter : ISudokuStarter
             requirements.Add(requirement);
         }
 
-        RequirementChain requirementChain = new(requirements);
+        RequirementChain<SudokuGame, Coordinate> requirementChain = new(requirements);
         SudokuSetting setting = new()
         {
             AvailableSet = jsonConfig.AvailableSet,
@@ -69,9 +70,9 @@ public class JsonSudokuStarter : ISudokuStarter
             SubGridSizeY = jsonConfig.SubGridSizeY
         };
         SudokuGame sudokuGame = new(setting, jsonConfig.GameBoard);
-        ISolver solver = new DfsSolver();
+        DfsSolver solver = new DfsSolver();
         DateTime t1 = DateTime.Now;
-        ICollection<ISudokuGame> res = solver.Solve(sudokuGame, requirementChain);
+        ICollection<SudokuGame> res = solver.Solve(sudokuGame, requirementChain);
         DateTime t2 = DateTime.Now;
         solveTime = (t2 - t1).Milliseconds;
         return res;

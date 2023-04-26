@@ -6,7 +6,7 @@ namespace MokuSakura.Sudoku.Core.Solver;
 
 public class DfsSolver : ISolver<SudokuGame, Coordinate>
 {
-    public ICollection<SudokuGame> Solve(SudokuGame sudokuGame, RequirementChain requirement)
+    public ICollection<SudokuGame> Solve(SudokuGame sudokuGame,RequirementChain<SudokuGame, Coordinate> requirement)
     {
         requirement.Init(sudokuGame);
         List<SudokuGame> res = new List<SudokuGame>();
@@ -14,7 +14,7 @@ public class DfsSolver : ISolver<SudokuGame, Coordinate>
         return res;
     }
 
-    private void DfsBody(SudokuGame sudokuGame, RequirementChain requirement, Int32 n, List<SudokuGame> res)
+    private void DfsBody(SudokuGame sudokuGame, RequirementChain<SudokuGame, Coordinate>  requirement, Int32 n, List<SudokuGame> res)
     {
         if (n >= sudokuGame.NumToFill)
         {

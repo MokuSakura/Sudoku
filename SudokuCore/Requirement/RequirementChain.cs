@@ -5,9 +5,11 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement;
 
-public class RequirementChain : IRequirement<Object, ISudokuGame<ICoordination>, ICoordination>
+public class RequirementChain<TSudokuGameType,TCoordinationType> : IRequirement<Object, TSudokuGameType, TCoordinationType>
+where TCoordinationType : ICoordination
+where TSudokuGameType : ISudokuGame<TCoordinationType>
 {
-    private static ILog Log => LogManager.GetLogger(typeof(RequirementChain));
+    private static ILog Log => LogManager.GetLogger(typeof(RequirementChain<,>));
 
     private static MethodInfo? GetMethodOrDefault(Type instanceType, Type interfaceType, String name, Type[] argumentTypes)
     {
@@ -74,7 +76,7 @@ public class RequirementChain : IRequirement<Object, ISudokuGame<ICoordination>,
         }
     }
 
-    public Boolean FitRequirement(ISudokuGame<ICoordination> sudokuGame, ICoordination coordination, Int32 num)
+    public Boolean FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
     {
         Boolean res = true;
         foreach (var requirement in Requirements)
@@ -90,7 +92,7 @@ public class RequirementChain : IRequirement<Object, ISudokuGame<ICoordination>,
         return res;
     }
 
-    public void Init(ISudokuGame<ICoordination> sudokuGame)
+    public void Init(TSudokuGameType sudokuGame)
     {
         foreach (var requirement in Requirements)
         {
@@ -100,7 +102,7 @@ public class RequirementChain : IRequirement<Object, ISudokuGame<ICoordination>,
         }
     }
 
-    public void Step(ISudokuGame<ICoordination> sudokuGame, ICoordination coordination, Int32 num)
+    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
     {
         foreach (var requirement in Requirements)
         {
@@ -109,7 +111,7 @@ public class RequirementChain : IRequirement<Object, ISudokuGame<ICoordination>,
         }
     }
 
-    public void RollBack(ISudokuGame<ICoordination> sudokuGame, ICoordination coordination)
+    public void RollBack(TSudokuGameType sudokuGame, TCoordinationType coordination)
     {
         foreach (var requirement in Requirements)
         {

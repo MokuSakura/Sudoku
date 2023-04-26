@@ -8,5 +8,5 @@ public interface ISolver<TSudokuGameType, TCoordinationType>
 where TSudokuGameType : ISudokuGame<TCoordinationType>
 where TCoordinationType : ICoordination
 {
-    public ICollection<TSudokuGameType> Solve(TSudokuGameType sudokuGame, RequirementChain requirement);
+    public ICollection<TSudokuGameType> Solve(TSudokuGameType sudokuGame, RequirementChain<TSudokuGameType, TCoordinationType> requirement);
 }
