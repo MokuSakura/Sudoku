@@ -9,7 +9,17 @@ public class SudokuRequirementReflectionUtils
     private static ILog Log => LogManager.GetLogger(typeof(SudokuRequirementReflectionUtils));
     public IDictionary<String, RequirementTemplate> RequirementTemplates { get; init; } = new Dictionary<String, RequirementTemplate>();
     public static SudokuRequirementReflectionUtils Instance { get; } = new();
+    
+    public static Type[] GetGenericArguments(Type type, Type genericType)
+    {
+        return type.GetInterfaces() //取类型的接口
+            .Where(IsGenericType) //筛选出相应泛型接口
+            .SelectMany(i => i.GetGenericArguments()) //选择所有接口的泛型参数
+            .ToArray(); //ToArray
 
+        Boolean IsGenericType(Type type1)
+            => type1.IsGenericType && type1.GetGenericTypeDefinition() == genericType;
+    }
     public Object? CreateRequirement(String requirementName)
     {
         if (RequirementTemplates.TryGetValue(requirementName, out RequirementTemplate requirementTemplate))
@@ -22,7 +32,7 @@ public class SudokuRequirementReflectionUtils
 
     private SudokuRequirementReflectionUtils()
     {
-        Type requirementType = typeof(IRequirement<>);
+        Type requirementType = typeof(IRequirement<,,>);
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             foreach (Type type in assembly.GetTypes())

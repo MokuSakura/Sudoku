@@ -3,21 +3,21 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class ColRequirement : IRequirement<Object>
+public class ColRequirement : IRequirement<Object, SudokuGame, Coordinate>
 {
     protected Boolean[,] Cache { get; set; } = { };
 
-    public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
+    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         return !Cache[coordination.Y, num];
     }
 
-    public void Init(ISudokuGame sudokuGame)
+    public void Init(SudokuGame sudokuGame)
     {
         Cache = new Boolean[sudokuGame.ColNum, sudokuGame.AvailableSet.Max() + 1];
         for (Int32 i = 0; i < sudokuGame.NumToFill; ++i)
         {
-            ICoordination coordination = sudokuGame.MapIndexToCoordination(i);
+            Coordinate coordination = sudokuGame.MapIndexToCoordination(i);
             Int32 num = sudokuGame.GetNum(coordination);
             Int32 colIdx = coordination.Y;
             if (num != 0)
@@ -27,12 +27,12 @@ public class ColRequirement : IRequirement<Object>
         }
     }
 
-    public void Step(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
+    public void Step(SudokuGame sudokuGame, Coordinate3D coordination, Int32 num)
     {
         Cache[coordination.Y, num] = true;
     }
 
-    public void RollBack(ISudokuGame sudokuGame, ICoordination coordination)
+    public void RollBack(SudokuGame sudokuGame, Coordinate coordination)
     {
         Cache[coordination.Y, sudokuGame.GetNum(coordination)] = false;
     }

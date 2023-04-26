@@ -3,21 +3,21 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class SubGridRequirement : IRequirement<Object>
+public class SubGridRequirement : IRequirement<Object, SudokuGame, Coordinate>
 {
     protected Boolean[,] Cache { get; set; } = { };
 
-    public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
+    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         return !Cache[GetSubGridIdx(sudokuGame,coordination), num];
     }
 
-    public void Init(ISudokuGame sudokuGame)
+    public void Init(SudokuGame sudokuGame)
     {
         Cache = new Boolean[sudokuGame.SubGridNum, sudokuGame.AvailableSet.Max() + 1];
         for (Int32 i = 0; i < sudokuGame.NumToFill; ++i)
         {
-            ICoordination coordination = sudokuGame.MapIndexToCoordination(i);
+            Coordinate coordination = sudokuGame.MapIndexToCoordination(i);
             Int32 num = sudokuGame.GetNum(coordination);
             Int32 subGridIdx = GetSubGridIdx(sudokuGame,coordination);
             if (num != 0)
@@ -27,16 +27,16 @@ public class SubGridRequirement : IRequirement<Object>
         }
     }
 
-    public void Step(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
+    public void Step(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         Cache[GetSubGridIdx(sudokuGame,coordination), num] = true;
     }
 
-    public void RollBack(ISudokuGame sudokuGame, ICoordination coordination)
+    public void RollBack(SudokuGame sudokuGame, Coordinate coordination)
     {
         Cache[GetSubGridIdx(sudokuGame,coordination), sudokuGame.GetNum(coordination)] = false;
     }
-    protected Int32 GetSubGridIdx(ISudokuGame sudokuGame, ICoordination coordination)
+    protected Int32 GetSubGridIdx(SudokuGame sudokuGame, Coordinate coordination)
     {
         return coordination.X / sudokuGame.SubGridSizeX * sudokuGame.SubGridSizeX + coordination.Y / sudokuGame.SubGridSizeY;
     }

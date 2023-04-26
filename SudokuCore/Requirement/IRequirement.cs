@@ -3,25 +3,27 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement;
 
-public interface IRequirement<in TConfigType> where TConfigType : class, new()
+public interface IRequirement<in TConfigType, in TSudokuGameType, in TCoordinationType>
+    where TConfigType : class, new()
+    where TSudokuGameType : ISudokuGame<TCoordinationType>
+    where TCoordinationType : ICoordination
 {
-
-    public Boolean FitRequirement(ISudokuGame sudokuGame, ICoordination coordination, Int32 num);
+    public Boolean FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num);
 
     public void Configure(TConfigType configuration)
     {
     }
 
     // public sealed Object DefaultConfig => new TConfigType();
-    public void Init(ISudokuGame sudokuGame)
+    public void Init(TSudokuGameType sudokuGame)
     {
     }
 
-    public void Step(ISudokuGame sudokuGame, ICoordination coordination, Int32 num)
+    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
     {
     }
 
-    public void RollBack(ISudokuGame sudokuGame, ICoordination coordination)
+    public void RollBack(TSudokuGameType sudokuGame, TCoordinationType coordination)
     {
     }
 }

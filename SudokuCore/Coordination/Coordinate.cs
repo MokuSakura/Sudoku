@@ -3,7 +3,7 @@ namespace MokuSakura.Sudoku.Core.Coordination;
 /// <summary>
 /// 2D coordinate. Never try to new it. Instead using index to get it from ISudokuGame by calling ISudokuGame#MapIndexToCoordination
 /// </summary>
-public readonly struct Coordinate : ICoordination
+public class Coordinate : ICoordination
 {
     internal Coordinate(Int32 x, Int32 y)
     {

@@ -14,17 +14,7 @@ public class JsonSudokuStarter : ISudokuStarter
     public IEnumerable<String> RegisterName => new[] { GetType().Name, "J", "j", "json", "JsonStarter" };
     private static ILog Log => LogManager.GetLogger(typeof(JsonSudokuStarter));
     private String Json { get; }
-    
-    static Type[] GetGenericArguments(Type type, Type genericType)
-    {
-        return type.GetInterfaces() //取类型的接口
-            .Where(IsGenericType) //筛选出相应泛型接口
-            .SelectMany(i => i.GetGenericArguments()) //选择所有接口的泛型参数
-            .ToArray(); //ToArray
 
-        Boolean IsGenericType(Type type1)
-            => type1.IsGenericType && type1.GetGenericTypeDefinition() == genericType;
-    }
 
     public JsonSudokuStarter(String json)
     {
@@ -57,11 +47,12 @@ public class JsonSudokuStarter : ISudokuStarter
 
            
             Type requirementType = requirement.GetType();
-            Type configType = GetGenericArguments(requirementType, typeof(IRequirement<>))[0];
+            Type[] typeArguments = SudokuRequirementReflectionUtils.GetGenericArguments(requirementType, typeof(IRequirement<,,>));
+            Type configType = typeArguments[0];
             // Type configType = requirementType.GetMethod("Configure", new Type[] { requirementType.GetInterfaces().Where(type => type.ContainsGenericParameters && ) });
 
             Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType)!;
-            Type makeGenericType =typeof(IRequirement<>).MakeGenericType(configType);
+            Type makeGenericType =typeof(IRequirement<,,>).MakeGenericType(typeArguments);
             MethodInfo configureMethodInfo = makeGenericType.GetMethod("Configure")!;
             // requirementType.InvokeMember("Configure", BindingFlags.Instance | BindingFlags.InvokeMethod, null, requirement, new []{config});
             configureMethodInfo.Invoke(requirement, new[] { config });

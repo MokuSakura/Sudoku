@@ -4,17 +4,17 @@ using MokuSakura.Sudoku.Core.Requirement;
 
 namespace MokuSakura.Sudoku.Core.Solver;
 
-public class DfsSolver : ISolver
+public class DfsSolver : ISolver<SudokuGame, Coordinate>
 {
-    public ICollection<ISudokuGame> Solve(ISudokuGame sudokuGame, RequirementChain requirement)
+    public ICollection<SudokuGame> Solve(SudokuGame sudokuGame, RequirementChain requirement)
     {
         requirement.Init(sudokuGame);
-        List<ISudokuGame> res = new List<ISudokuGame>();
+        List<SudokuGame> res = new List<SudokuGame>();
         DfsBody(sudokuGame, requirement, 0, res);
         return res;
     }
 
-    private void DfsBody(ISudokuGame sudokuGame, RequirementChain requirement, Int32 n, List<ISudokuGame> res)
+    private void DfsBody(SudokuGame sudokuGame, RequirementChain requirement, Int32 n, List<SudokuGame> res)
     {
         if (n >= sudokuGame.NumToFill)
         {
@@ -22,7 +22,7 @@ public class DfsSolver : ISolver
             return;
         }
 
-        ICoordination coordinate = sudokuGame.MapIndexToCoordination(n);
+        Coordinate coordinate = sudokuGame.MapIndexToCoordination(n);
 
         if (sudokuGame.GetNum(coordinate) != 0)
         {
