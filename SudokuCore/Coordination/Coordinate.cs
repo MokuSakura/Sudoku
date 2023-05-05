@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace MokuSakura.Sudoku.Core.Coordination;
 
 /// <summary>
@@ -5,7 +7,9 @@ namespace MokuSakura.Sudoku.Core.Coordination;
 /// </summary>
 public readonly struct Coordinate : ICoordination
 {
-    internal Coordinate(Int32 x, Int32 y)
+    
+    [JsonConstructor]
+    public Coordinate(Int32 x, Int32 y)
     {
         this.X = x;
         this.Y = y;
