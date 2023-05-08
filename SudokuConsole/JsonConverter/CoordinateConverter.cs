@@ -18,57 +18,60 @@ public class CoordinateConverter : JsonConverter<Coordinate>
 
     public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, Boolean hasExistingValue, JsonSerializer serializer)
     {
-        if (reader.TokenType == JsonToken.StartArray)
+        switch (reader.TokenType)
         {
-            // reader.Read();
-            Int32 x = reader.ReadAsInt32() ?? 0;
-            Int32 y = reader.ReadAsInt32() ?? 0;
-
-            Int32 depth = reader.Depth;
-            while (reader.Read() && (depth <= reader.Depth))
+            case JsonToken.StartArray:
             {
+                // reader.Read();
+                Int32 beginDepth = reader.Depth + 1;
+                Int32 x = reader.ReadAsInt32()!.Value;
+                Int32 y = reader.ReadAsInt32()!.Value;
+                while (reader.Depth >= beginDepth && reader.Read())
+                {
+                }
+
+                return new Coordinate(x, y);
             }
+            case JsonToken.StartObject:
+            {
+                Int32 x = 0;
+                Int32 y = 0;
+                Boolean xRead = false;
+                Boolean yRead = false;
+                Int32 beginDepth = reader.Depth + 1;
+                while (!(xRead && yRead))
+                {
+                    reader.Read();
+                    String propertyName = reader.Value!.ToString()!;
 
-            return new Coordinate(x, y);
+                    if (String.Equals(propertyName, "X", StringComparison.OrdinalIgnoreCase))
+                    {
+                        x = reader.ReadAsInt32() ?? 0;
+                        xRead = true;
+                    }
+                    else if (String.Equals(propertyName, "Y", StringComparison.OrdinalIgnoreCase))
+                    {
+                        y = reader.ReadAsInt32() ?? 0;
+                        yRead = true;
+                    }
+                    else
+                    {
+                        reader.Skip();
+                    }
+                }
+
+                SkipDepth(reader, beginDepth);
+                return new Coordinate(x, y);
+            }
+            default:
+                return existingValue;
         }
+    }
 
-        if (reader.TokenType == JsonToken.StartObject)
+    private static void SkipDepth(JsonReader reader, Int32 depth)
+    {
+        while (reader.Depth >= depth && reader.Read())
         {
-            Int32 x = 0;
-            Int32 y = 0;
-            reader.Read();
-            Boolean xRead = false;
-            Boolean yRead = false;
-            while (!(xRead && yRead))
-            {
-                String propertyName = reader.Value!.ToString()!;
-                Int32 value = reader.ReadAsInt32() ?? 0;
-                if (String.Equals(propertyName, "X", StringComparison.OrdinalIgnoreCase))
-                {
-                    x = value;
-                    xRead = true;
-                }
-                else if (String.Equals(propertyName, "Y", StringComparison.OrdinalIgnoreCase))
-                {
-                    y = value;
-                    yRead = true;
-                }
-
-                reader.Read();
-            }
-
-            if (reader.TokenType != JsonToken.EndObject)
-            {
-                Int32 depth = reader.Depth;
-
-                while (reader.Read() && (depth <= reader.Depth))
-                {
-                }
-            }
-
-            return new Coordinate(x, y);
         }
-
-        return existingValue;
     }
 }
