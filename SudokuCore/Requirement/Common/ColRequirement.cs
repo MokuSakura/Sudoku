@@ -3,7 +3,7 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class ColRequirement : AbstractSudokuRequirement<Object>
+public class ColRequirement : AbstractSudokuRequirement
 {
     protected Boolean[,] Cache { get; set; } = { };
 

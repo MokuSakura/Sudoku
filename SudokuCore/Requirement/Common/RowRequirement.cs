@@ -4,7 +4,7 @@ using MokuSakura.Sudoku.Core.Setting;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class RowRequirement : AbstractSudokuRequirement<Object>
+public class RowRequirement : AbstractSudokuRequirement
 {
     protected Boolean[,] Cache { get; set; } = { };
 

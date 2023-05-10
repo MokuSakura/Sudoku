@@ -4,7 +4,7 @@ using MokuSakura.Sudoku.Core.Requirement.Common;
 
 namespace MokuSakura.Sudoku.Core.Requirement;
 
-public class ArrowRequirement : AbstractSudokuRequirement<ArrowConfig>
+public class ArrowRequirement : AbstractSudokuRequirement,IConfigurable<ArrowConfig>
 {
     protected Dictionary<Coordinate, ArrowCache> TargetToArrowDict { get; } = new();
     protected Dictionary<Coordinate, ArrowCache> PathToArrowDict { get; } = new();
@@ -40,9 +40,8 @@ public class ArrowRequirement : AbstractSudokuRequirement<ArrowConfig>
         return true;
     }
 
-    public override void Configure(Object config)
+    public void Configure(ArrowConfig configuration)
     {
-        ArrowConfig configuration = (ArrowConfig)config;
         TargetToArrowDict.EnsureCapacity(configuration.Arrows.Count);
         PathToArrowDict.EnsureCapacity(configuration.Arrows.Count);
         foreach (Arrow arrow in configuration.Arrows)

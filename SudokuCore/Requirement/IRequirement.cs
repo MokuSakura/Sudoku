@@ -3,16 +3,16 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement;
 
-public interface IRequirement<out TConfigType, in TSudokuGameType, in TCoordinationType>
-    where TConfigType : class, new()
+public interface IRequirement<in TSudokuGameType, in TCoordinationType>
+    // where TConfigType : class, new()
     where TSudokuGameType : ISudokuGame<TCoordinationType>
     where TCoordinationType : ICoordination
 {
     public Boolean FitRequirement(TSudokuGameType sudokuGame, Int32 idx, Int32 num);
 
-    public void Configure(Object configuration)
-    {
-    }
+    // public void Configure(Object configuration)
+    // {
+    // }
     // public sealed Object DefaultConfig => new TConfigType();
     public void Init(TSudokuGameType sudokuGame)
     {

@@ -3,7 +3,7 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class SubGridRequirement : AbstractSudokuRequirement<Object>
+public class SubGridRequirement : AbstractSudokuRequirement
 {
     protected Boolean[,] Cache { get; set; } = { };
 

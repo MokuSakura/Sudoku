@@ -30,11 +30,11 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
     }
 
     // protected List<RequirementMethods> Requirements { get; init; }
-    protected List<IRequirement<Object, TSudokuGameType, TCoordinationType>> Requirements2 { get; init; }
+    protected List<IRequirement<TSudokuGameType, TCoordinationType>> Requirements2 { get; init; }
 
-    public RequirementChain(ICollection<IRequirement<Object, TSudokuGameType, TCoordinationType>> requirements)
+    public RequirementChain(ICollection<IRequirement<TSudokuGameType, TCoordinationType>> requirements)
     {
-        Requirements2 = new List<IRequirement<Object, TSudokuGameType, TCoordinationType>>(requirements);
+        Requirements2 = new List<IRequirement<TSudokuGameType, TCoordinationType>>(requirements);
         
         // Requirements = new List<RequirementMethods>();
         // foreach (Object requirement in requirements)

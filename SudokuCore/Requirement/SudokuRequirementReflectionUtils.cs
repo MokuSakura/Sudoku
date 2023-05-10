@@ -32,7 +32,7 @@ public class SudokuRequirementReflectionUtils
 
     private SudokuRequirementReflectionUtils()
     {
-        Type requirementType = typeof(IRequirement<,,>);
+        Type requirementType = typeof(IRequirement<,>);
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             foreach (Type type in assembly.GetTypes())
