@@ -1,11 +1,15 @@
+using Newtonsoft.Json;
+
 namespace MokuSakura.Sudoku.Core.Coordination;
 
 /// <summary>
 /// 2D coordinate. Never try to new it. Instead using index to get it from ISudokuGame by calling ISudokuGame#MapIndexToCoordination
 /// </summary>
-public class Coordinate : ICoordination
+public struct Coordinate : ICoordination
 {
-    internal Coordinate(Int32 x, Int32 y)
+    
+    [JsonConstructor]
+    public Coordinate(Int32 x, Int32 y)
     {
         this.X = x;
         this.Y = y;

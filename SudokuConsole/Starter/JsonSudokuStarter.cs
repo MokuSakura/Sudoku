@@ -6,6 +6,7 @@ using MokuSakura.Sudoku.Core.Requirement;
 using MokuSakura.Sudoku.Core.Setting;
 using MokuSakura.Sudoku.Core.Solver;
 using MokuSakura.SudokuConsole.Exception;
+using MokuSakura.SudokuConsole.JsonConverter;
 using Newtonsoft.Json;
 
 namespace MokuSakura.SudokuConsole.Starter;
@@ -34,6 +35,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
             DefaultValueHandling = DefaultValueHandling.Ignore,
             ConstructorHandling = ConstructorHandling.Default
         };
+        settings.Converters.Add(new CoordinateConverter());
         JsonConfig jsonConfig = JsonConvert.DeserializeObject<JsonConfig>(Json, settings) ?? new JsonConfig();
         List<IRequirement<Object, SudokuGame, Coordinate>> requirements = new();
         SudokuRequirementReflectionUtils requirementReflectionUtils = SudokuRequirementReflectionUtils.Instance;
@@ -51,9 +53,10 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
             Type[] typeArguments = SudokuRequirementReflectionUtils.GetGenericArguments(requirementType, typeof(IRequirement<,,>));
             Type configType = typeArguments[0];
             // Type configType = requirementType.GetMethod("Configure", new Type[] { requirementType.GetInterfaces().Where(type => type.ContainsGenericParameters && ) });
-
-            Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType)!;
+            
+            Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType, settings)!;
             Type makeGenericType = typeof(IRequirement<,,>).MakeGenericType(typeArguments);
+
             MethodInfo configureMethodInfo = makeGenericType.GetMethod("Configure")!;
             // requirementType.InvokeMember("Configure", BindingFlags.Instance | BindingFlags.InvokeMethod, null, requirement, new []{config});
             configureMethodInfo.Invoke(requirement, new[] { config });
