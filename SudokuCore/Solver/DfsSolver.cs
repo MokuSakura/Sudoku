@@ -22,28 +22,29 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
             return true;
         }
 
+        TCoordinationType coordination = sudokuGame.MapIndexToCoordination(n);
 
-        if (sudokuGame.GetNum(n) != 0)
+        if (sudokuGame.GetNum(coordination) != 0)
         {
             return DfsBody(sudokuGame, requirement, n + 1);
         }
 
         foreach (Int32 testNum in sudokuGame.AvailableSet)
         {
-            if (!requirement.FitRequirement(sudokuGame, n, testNum))
+            if (!requirement.FitRequirement(sudokuGame, coordination, testNum))
             {
                 continue;
             }
 
-            sudokuGame.SetNum(n, testNum);
-            requirement.Step(sudokuGame, n, testNum);
+            sudokuGame.SetNum(coordination, testNum);
+            requirement.Step(sudokuGame, coordination, testNum);
             if (DfsBody(sudokuGame, requirement, n + 1))
             {
                 return true;
             }
 
-            requirement.RollBack(sudokuGame, n);
-            sudokuGame.SetNum(n, 0);
+            requirement.RollBack(sudokuGame, coordination);
+            sudokuGame.SetNum(coordination, 0);
         }
 
         return false;

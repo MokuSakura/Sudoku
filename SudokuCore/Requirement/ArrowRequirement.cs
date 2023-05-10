@@ -1,15 +1,15 @@
 using MokuSakura.Sudoku.Core.Coordination;
 using MokuSakura.Sudoku.Core.Game;
-using MokuSakura.Sudoku.Core.Requirement.Common;
+
 
 namespace MokuSakura.Sudoku.Core.Requirement;
 
-public class ArrowRequirement : AbstractSudokuRequirement,IConfigurable<ArrowConfig>
+public class ArrowRequirement : IRequirement<SudokuGame, Coordinate>, IConfigurable<ArrowConfig>
 {
     protected Dictionary<Coordinate, ArrowCache> TargetToArrowDict { get; } = new();
     protected Dictionary<Coordinate, ArrowCache> PathToArrowDict { get; } = new();
 
-    public override Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordinate, Int32 num)
+    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordinate, Int32 num)
     {
         if (TargetToArrowDict.TryGetValue(coordinate, out ArrowCache? arrow))
         {
@@ -61,7 +61,7 @@ public class ArrowRequirement : AbstractSudokuRequirement,IConfigurable<ArrowCon
         }
     }
 
-    public override void Step(SudokuGame sudokuGame, Coordinate coordinate, Int32 num)
+    public void Step(SudokuGame sudokuGame, Coordinate coordinate, Int32 num)
     {
         if (!PathToArrowDict.TryGetValue(coordinate, out ArrowCache? arrow))
         {
@@ -72,7 +72,7 @@ public class ArrowRequirement : AbstractSudokuRequirement,IConfigurable<ArrowCon
         --arrow.RemainToAdd;
     }
 
-    public override void Rollback(SudokuGame sudokuGame, Coordinate coordinate)
+    public void Rollback(SudokuGame sudokuGame, Coordinate coordinate)
     {
         if (!PathToArrowDict.TryGetValue(coordinate, out ArrowCache? arrow))
         {
@@ -97,7 +97,7 @@ public class Arrow
 
 public class ArrowCache
 {
-    public Coordinate SumTarget { get; set; } = new(0, 0);
+    public Coordinate SumTarget { get; set; }
     public List<Coordinate> SumPath { get; set; } = new();
     public Int32 CurrentSum { get; set; }
     public Int32 RemainToAdd { get; set; }

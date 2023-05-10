@@ -11,11 +11,6 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
 {
     private static ILog Log => LogManager.GetLogger(typeof(RequirementChain<TSudokuGameType,TCoordinationType>));
 
-    private static MethodInfo? GetMethodOrDefault(Type instanceType, Type interfaceType, String name, Type[] argumentTypes)
-    {
-        return instanceType.GetMethod(name, argumentTypes) ?? interfaceType.GetMethod(name, argumentTypes);
-    }
-
     protected struct RequirementMethods
     {
         public Object Requirement { get; init; }
@@ -79,7 +74,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         // }
     }
 
-    public Boolean FitRequirement(TSudokuGameType sudokuGame, Int32 idx, Int32 num)
+    public Boolean FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
     {
         Boolean res = true;
         // foreach (var requirement in Requirements)
@@ -94,7 +89,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         foreach (var requirement in Requirements2)
         {
             // res = res && (Boolean)requirement.FitRequirement.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num })!;
-            res = res && requirement.FitRequirement(sudokuGame, idx, num);
+            res = res && requirement.FitRequirement(sudokuGame, coordination, num);
             if (!res)
             {
                 break;
@@ -120,7 +115,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         }
     }
 
-    public void Step(TSudokuGameType sudokuGame, Int32 idx, Int32 num)
+    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
     {
         // foreach (var requirement in Requirements)
         // {
@@ -130,11 +125,11 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         foreach (var requirement in Requirements2)
         {
             // requirement.Step.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num });
-            requirement.Step(sudokuGame, idx, num);
+            requirement.Step(sudokuGame, coordination, num);
         }
     }
 
-    public void RollBack(TSudokuGameType sudokuGame, Int32 idx)
+    public void RollBack(TSudokuGameType sudokuGame, TCoordinationType coordination)
     {
         // foreach (var requirement in Requirements)
         // {
@@ -144,7 +139,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         foreach (var requirement in Requirements2)
         {
             // requirement.Rollback.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination });
-            requirement.Rollback(sudokuGame, idx);
+            requirement.Rollback(sudokuGame, coordination);
         }
     }
 }

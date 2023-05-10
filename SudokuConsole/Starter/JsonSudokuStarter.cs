@@ -55,9 +55,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
             {
                 Type configType = SudokuRequirementReflectionUtils.GetGenericArguments(requirementType, typeof(IConfigurable<>))[0];
                 Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType, settings)!;
-                // Type makeGenericType = configurableInterface.MakeGenericType(configType);
                 MethodInfo configureMethodInfo = configurableInterface.GetMethod("Configure")!;
-                // requirementType.InvokeMember("Configure", BindingFlags.Instance | BindingFlags.InvokeMethod, null, requirement, new []{config});
                 configureMethodInfo.Invoke(requirement, new[] { config });
             }
 

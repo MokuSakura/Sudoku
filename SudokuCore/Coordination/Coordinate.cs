@@ -5,7 +5,7 @@ namespace MokuSakura.Sudoku.Core.Coordination;
 /// <summary>
 /// 2D coordinate. Never try to new it. Instead using index to get it from ISudokuGame by calling ISudokuGame#MapIndexToCoordination
 /// </summary>
-public struct Coordinate : ICoordination
+public readonly struct Coordinate : ICoordination
 {
     
     [JsonConstructor]
