@@ -5,8 +5,8 @@ using MokuSakura.Sudoku.Core.Requirement;
 namespace MokuSakura.Sudoku.Core.Solver;
 
 public interface ISolver<TSudokuGameType, TCoordinationType>
-where TSudokuGameType : ISudokuGame<TCoordinationType>
 where TCoordinationType : ICoordination
+where TSudokuGameType : ISudokuGame<TCoordinationType>
 {
-    public ICollection<TSudokuGameType> Solve(TSudokuGameType sudokuGame, RequirementChain requirement);
+    public TSudokuGameType Solve(TSudokuGameType sudokuGame, RequirementChain<TSudokuGameType, TCoordinationType> requirement);
 }

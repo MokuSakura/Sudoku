@@ -4,47 +4,46 @@ using MokuSakura.Sudoku.Core.Requirement;
 
 namespace MokuSakura.Sudoku.Core.Solver;
 
-public class DfsSolver<TSudokuGameType, TCoordinationType>
-: ISolver<TSudokuGameType, TCoordinationType>
-    where TSudokuGameType : ISudokuGame<TCoordinationType>
-    where TCoordinationType : ICoordination 
+public class DfsSolver : ISolver<SudokuGame, Coordinate>
 {
-    public ICollection<TSudokuGameType> Solve(TSudokuGameType sudokuGame,RequirementChain requirement)
+    public ISudokuGame<ICoordination> Solve(SudokuGame sudokuGame, RequirementChain<SudokuGame, Coordinate> requirement)
     {
         requirement.Init(sudokuGame);
-        List<TSudokuGameType> res = new List<TSudokuGameType>();
-        DfsBody(sudokuGame, requirement, 0, res);
-        return res;
+        DfsBody(sudokuGame, requirement, 0);
+        return sudokuGame;
     }
 
-    private void DfsBody(TSudokuGameType sudokuGame, RequirementChain  requirement, Int32 n, List<TSudokuGameType> res)
+    private Boolean DfsBody(SudokuGame sudokuGame, RequirementChain<SudokuGame, Coordinate> requirement, Int32 n)
     {
         if (n >= sudokuGame.NumToFill)
         {
-            res.Add(sudokuGame.Clone());
-            return;
+            return true;
         }
 
-        Coordinate coordinate = sudokuGame.MapIndexToCoordination(n);
 
-        if (sudokuGame.GetNum(coordinate) != 0)
+        if (sudokuGame.GetNum(n) != 0)
         {
-            DfsBody(sudokuGame, requirement, n + 1, res);
-            return;
+            return DfsBody(sudokuGame, requirement, n + 1);
         }
 
         foreach (Int32 testNum in sudokuGame.AvailableSet)
         {
-            if (!requirement.FitRequirement(sudokuGame, coordinate, testNum))
+            if (!requirement.FitRequirement(sudokuGame, n, testNum))
             {
                 continue;
             }
 
-            sudokuGame.SetNum(coordinate, testNum);
-            requirement.Step(sudokuGame, coordinate, testNum);
-            DfsBody(sudokuGame, requirement, n + 1, res);
-            requirement.RollBack(sudokuGame, coordinate);
-            sudokuGame.SetNum(coordinate, 0);
+            sudokuGame.SetNum(n, testNum);
+            requirement.Step(sudokuGame, n, testNum);
+            if (DfsBody(sudokuGame, requirement, n + 1))
+            {
+                return true;
+            }
+
+            requirement.RollBack(sudokuGame, n);
+            sudokuGame.SetNum(n, 0);
         }
+
+        return false;
     }
 }

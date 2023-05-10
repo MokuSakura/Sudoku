@@ -5,9 +5,11 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement;
 
-public class RequirementChain
+public class RequirementChain<TSudokuGameType, TCoordinationType>
+where TCoordinationType : ICoordination
+where TSudokuGameType : ISudokuGame<TCoordinationType>
 {
-    private static ILog Log => LogManager.GetLogger(typeof(RequirementChain));
+    private static ILog Log => LogManager.GetLogger(typeof(RequirementChain<TSudokuGameType,TCoordinationType>));
 
     private static MethodInfo? GetMethodOrDefault(Type instanceType, Type interfaceType, String name, Type[] argumentTypes)
     {
@@ -27,60 +29,72 @@ public class RequirementChain
         public Delegate InitDelegate { get; init; }
     }
 
-    protected List<RequirementMethods> Requirements { get; init; }
+    // protected List<RequirementMethods> Requirements { get; init; }
+    protected List<IRequirement<Object, TSudokuGameType, TCoordinationType>> Requirements2 { get; init; }
 
-
-    public RequirementChain(ICollection<Object> requirements)
+    public RequirementChain(ICollection<IRequirement<Object, TSudokuGameType, TCoordinationType>> requirements)
     {
-        Requirements = new List<RequirementMethods>();
-        foreach (Object requirement in requirements)
-        {
-            Type instanceType = requirement.GetType();
-            Type? interfaceType = instanceType.GetInterface("IRequirement`3");
-            if (interfaceType == null)
-            {
-                Log.Error($"{requirement.GetType()} does not implements IRequirement<>.");
-                throw new ArgumentException();
-            }
-
-            Type[] typeArgument = SudokuRequirementReflectionUtils.GetGenericArguments(instanceType, typeof(IRequirement<,,>));
-            MethodInfo fitRequirementMethod = GetMethodOrDefault(instanceType, interfaceType, "FitRequirement",
-                new[] { typeArgument[1], typeArgument[2], typeof(Int32) })!;
-            MethodInfo initMethod = GetMethodOrDefault(instanceType, interfaceType, "Init", new[] {typeArgument[1] })!;
-            MethodInfo rollbackMethod = GetMethodOrDefault(instanceType, interfaceType, "RollBack", new[] { typeArgument[1], typeArgument[2] })!;
-            MethodInfo steptMethod = GetMethodOrDefault(instanceType, interfaceType, "Step",
-                new[] { typeArgument[1], typeArgument[2], typeof(Int32) })!;
-            Delegate fitRequirementDelegate =
-                Delegate.CreateDelegate(typeof(Func<, , , >).MakeGenericType(typeArgument[1], typeArgument[2],typeof(Int32), typeof(Boolean)), requirement, fitRequirementMethod);
-            Delegate stepDelegate = 
-                Delegate.CreateDelegate(typeof(Action<ISudokuGame, ICoordination, Int32>), requirement, steptMethod);
-            Delegate rollBackDelegate = 
-                Delegate.CreateDelegate(typeof(Action<ISudokuGame, ICoordination>), requirement, rollbackMethod);
-            Delegate initDelegate = 
-                Delegate.CreateDelegate(typeof(Action<ISudokuGame>), requirement, initMethod);
-
-            Requirements.Add(new RequirementMethods
-            {
-                Requirement = requirement,
-                FitRequirement = fitRequirementMethod,
-                Init = initMethod,
-                Rollback = rollbackMethod,
-                Step = steptMethod,
-                FitRequirementDelegate = fitRequirementDelegate,
-                StepDelegate = stepDelegate,
-                RollBackDelegate = rollBackDelegate,
-                InitDelegate = initDelegate
-            });
-        }
+        Requirements2 = new List<IRequirement<Object, TSudokuGameType, TCoordinationType>>(requirements);
+        
+        // Requirements = new List<RequirementMethods>();
+        // foreach (Object requirement in requirements)
+        // {
+        //     Type instanceType = requirement.GetType();
+        //     Type? interfaceType = instanceType.GetInterface("IRequirement`3");
+        //     if (interfaceType == null)
+        //     {
+        //         Log.Error($"{requirement.GetType()} does not implements IRequirement<>.");
+        //         throw new ArgumentException();
+        //     }
+        //
+        //     Type[] typeArgument = SudokuRequirementReflectionUtils.GetGenericArguments(instanceType, typeof(IRequirement<,,>));
+        //     MethodInfo fitRequirementMethod = GetMethodOrDefault(instanceType, interfaceType, "FitRequirement",
+        //         new[] { typeArgument[1], typeArgument[2], typeof(Int32) })!;
+        //     MethodInfo initMethod = GetMethodOrDefault(instanceType, interfaceType, "Init", new[] { typeArgument[1] })!;
+        //     MethodInfo rollbackMethod = GetMethodOrDefault(instanceType, interfaceType, "RollBack", new[] { typeArgument[1], typeArgument[2] })!;
+        //     MethodInfo steptMethod = GetMethodOrDefault(instanceType, interfaceType, "Step",
+        //         new[] { typeArgument[1], typeArgument[2], typeof(Int32) })!;
+        //     Delegate fitRequirementDelegate =
+        //         Delegate.CreateDelegate(typeof(Func<,,,>).MakeGenericType(typeof(TSudokuGameType), typeof(Int32), typeof(Int32), typeof(Boolean)), requirement,
+        //             fitRequirementMethod);
+        //     Delegate stepDelegate =
+        //         Delegate.CreateDelegate(typeof(Action<,,>).MakeGenericType(typeof(TSudokuGameType), typeof(Int32)), requirement, steptMethod);
+        //     Delegate rollBackDelegate =
+        //         Delegate.CreateDelegate(typeof(Action<,>).MakeGenericType(typeof(TSudokuGameType), typeof(Int32)), requirement, rollbackMethod);
+        //     Delegate initDelegate =
+        //         Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(typeof(TSudokuGameType)), requirement, initMethod);
+        //
+        //     Requirements.Add(new RequirementMethods
+        //     {
+        //         Requirement = requirement,
+        //         FitRequirement = fitRequirementMethod,
+        //         Init = initMethod,
+        //         Rollback = rollbackMethod,
+        //         Step = steptMethod,
+        //         FitRequirementDelegate = fitRequirementDelegate,
+        //         StepDelegate = stepDelegate,
+        //         RollBackDelegate = rollBackDelegate,
+        //         InitDelegate = initDelegate
+        //     });
+        // }
     }
 
-    public Boolean FitRequirement(Object sudokuGame, Object coordination, Int32 num)
+    public Boolean FitRequirement(TSudokuGameType sudokuGame, Int32 idx, Int32 num)
     {
         Boolean res = true;
-        foreach (var requirement in Requirements)
+        // foreach (var requirement in Requirements)
+        // {
+        //     // res = res && (Boolean)requirement.FitRequirement.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num })!;
+        //     res = res && (Boolean)requirement.FitRequirementDelegate.DynamicInvoke(sudokuGame, idx, num)!;
+        //     if (!res)
+        //     {
+        //         break;
+        //     }
+        // }
+        foreach (var requirement in Requirements2)
         {
             // res = res && (Boolean)requirement.FitRequirement.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num })!;
-            res = res && (Boolean) requirement.FitRequirementDelegate.DynamicInvoke(sudokuGame, coordination, num)!;
+            res = res && requirement.FitRequirement(sudokuGame, idx, num);
             if (!res)
             {
                 break;
@@ -90,7 +104,7 @@ public class RequirementChain
         return res;
     }
 
-    public void Init(Object sudokuGame)
+    public void Init(TSudokuGameType sudokuGame)
     {
         foreach (var requirement in Requirements)
         {
@@ -100,21 +114,21 @@ public class RequirementChain
         }
     }
 
-    public void Step(Object sudokuGame, Object coordination, Int32 num)
+    public void Step(TSudokuGameType sudokuGame, Int32 idx, Int32 num)
     {
         foreach (var requirement in Requirements)
         {
             // requirement.Step.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num });
-            requirement.StepDelegate.DynamicInvoke(sudokuGame, coordination, num);
+            requirement.StepDelegate.DynamicInvoke(sudokuGame, idx, num);
         }
     }
 
-    public void RollBack(Object sudokuGame, Object coordination)
+    public void RollBack(TSudokuGameType sudokuGame, Int32 idx)
     {
         foreach (var requirement in Requirements)
         {
             // requirement.Rollback.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination });
-            requirement.RollBackDelegate.DynamicInvoke(sudokuGame, coordination);
+            requirement.RollBackDelegate.DynamicInvoke(sudokuGame, idx);
         }
     }
 }
