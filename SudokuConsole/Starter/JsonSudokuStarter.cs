@@ -22,12 +22,12 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
         this.Json = json;
     }
 
-    public ICollection<SudokuGame> Run()
+    public SudokuGame Run()
     {
         return Run(out Int64 _);
     }
 
-    public ICollection<SudokuGame> Run(out Int64 solveTime)
+    public SudokuGame Run(out Int64 solveTime)
     {
         JsonSerializerSettings settings = new()
         {
@@ -35,7 +35,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
             ConstructorHandling = ConstructorHandling.Default
         };
         JsonConfig jsonConfig = JsonConvert.DeserializeObject<JsonConfig>(Json, settings) ?? new JsonConfig();
-        List<Object> requirements = new();
+        List<IRequirement<Object, SudokuGame, Coordinate>> requirements = new();
         SudokuRequirementReflectionUtils requirementReflectionUtils = SudokuRequirementReflectionUtils.Instance;
         foreach (RequirementConfig jsonConfigRequirement in jsonConfig.Requirements)
         {
@@ -46,18 +46,18 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
                 throw new NoRequirementFoundException(jsonConfigRequirement.RequirementName);
             }
 
-           
+
             Type requirementType = requirement.GetType();
             Type[] typeArguments = SudokuRequirementReflectionUtils.GetGenericArguments(requirementType, typeof(IRequirement<,,>));
             Type configType = typeArguments[0];
             // Type configType = requirementType.GetMethod("Configure", new Type[] { requirementType.GetInterfaces().Where(type => type.ContainsGenericParameters && ) });
 
             Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType)!;
-            Type makeGenericType =typeof(IRequirement<,,>).MakeGenericType(typeArguments);
+            Type makeGenericType = typeof(IRequirement<,,>).MakeGenericType(typeArguments);
             MethodInfo configureMethodInfo = makeGenericType.GetMethod("Configure")!;
             // requirementType.InvokeMember("Configure", BindingFlags.Instance | BindingFlags.InvokeMethod, null, requirement, new []{config});
             configureMethodInfo.Invoke(requirement, new[] { config });
-            requirements.Add(requirement);
+            requirements.Add((IRequirement<Object, SudokuGame, Coordinate>)requirement);
         }
 
         RequirementChain<SudokuGame, Coordinate> requirementChain = new(requirements);
@@ -70,9 +70,9 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
             SubGridSizeY = jsonConfig.SubGridSizeY
         };
         SudokuGame sudokuGame = new(setting, jsonConfig.GameBoard);
-        DfsSolver solver = new DfsSolver();
+        DfsSolver solver = new();
         DateTime t1 = DateTime.Now;
-        ICollection<SudokuGame> res = solver.Solve(sudokuGame, requirementChain);
+        var res = solver.Solve(sudokuGame, requirementChain);
         DateTime t2 = DateTime.Now;
         solveTime = (t2 - t1).Milliseconds;
         return res;

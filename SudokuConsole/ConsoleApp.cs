@@ -56,12 +56,8 @@ public sealed class ConsoleApp
             json = textReader.ReadToEnd();
         }
         JsonSudokuStarter starter = new(json);
-        ICollection<ISudokuGame> sudokuGames = starter.Run(out Int64 solveTime);
-        foreach (ISudokuGame sudokuGame in sudokuGames)
-        {
-            sudokuGame.PrintGameBoard(Console.Out);
-        }
-
+        SudokuGame sudokuGame = starter.Run(out Int64 solveTime);
+        sudokuGame.PrintGameBoard(Console.Out);
         Console.WriteLine($"Time used {solveTime}ms");
     }
 }

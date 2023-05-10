@@ -3,16 +3,16 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class ColRequirement : IRequirement<Object, SudokuGame, Coordinate>
+public class ColRequirement : AbstractSudokuRequirement<Object>
 {
     protected Boolean[,] Cache { get; set; } = { };
 
-    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public override Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         return !Cache[coordination.Y, num];
     }
 
-    public void Init(SudokuGame sudokuGame)
+    public override void Init(SudokuGame sudokuGame)
     {
         Cache = new Boolean[sudokuGame.ColNum, sudokuGame.AvailableSet.Max() + 1];
         for (Int32 i = 0; i < sudokuGame.NumToFill; ++i)
@@ -27,12 +27,12 @@ public class ColRequirement : IRequirement<Object, SudokuGame, Coordinate>
         }
     }
 
-    public void Step(SudokuGame sudokuGame, Coordinate3D coordination, Int32 num)
+    public override void Step(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         Cache[coordination.Y, num] = true;
     }
 
-    public void RollBack(SudokuGame sudokuGame, Coordinate coordination)
+    public override void Rollback(SudokuGame sudokuGame, Coordinate coordination)
     {
         Cache[coordination.Y, sudokuGame.GetNum(coordination)] = false;
     }

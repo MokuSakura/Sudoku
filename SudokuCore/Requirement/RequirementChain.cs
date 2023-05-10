@@ -51,7 +51,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         //     MethodInfo fitRequirementMethod = GetMethodOrDefault(instanceType, interfaceType, "FitRequirement",
         //         new[] { typeArgument[1], typeArgument[2], typeof(Int32) })!;
         //     MethodInfo initMethod = GetMethodOrDefault(instanceType, interfaceType, "Init", new[] { typeArgument[1] })!;
-        //     MethodInfo rollbackMethod = GetMethodOrDefault(instanceType, interfaceType, "RollBack", new[] { typeArgument[1], typeArgument[2] })!;
+        //     MethodInfo rollbackMethod = GetMethodOrDefault(instanceType, interfaceType, "Rollback", new[] { typeArgument[1], typeArgument[2] })!;
         //     MethodInfo steptMethod = GetMethodOrDefault(instanceType, interfaceType, "Step",
         //         new[] { typeArgument[1], typeArgument[2], typeof(Int32) })!;
         //     Delegate fitRequirementDelegate =
@@ -106,29 +106,45 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
 
     public void Init(TSudokuGameType sudokuGame)
     {
-        foreach (var requirement in Requirements)
+        // foreach (var requirement in Requirements)
+        // {
+        //     // requirement.Requirement.Init(sudokuGame);
+        //     // requirement.Init.Invoke(requirement.Requirement, new Object?[] { sudokuGame });
+        //     requirement.InitDelegate.DynamicInvoke(sudokuGame);
+        // }
+        foreach (var requirement in Requirements2)
         {
             // requirement.Requirement.Init(sudokuGame);
             // requirement.Init.Invoke(requirement.Requirement, new Object?[] { sudokuGame });
-            requirement.InitDelegate.DynamicInvoke(sudokuGame);
+            requirement.Init(sudokuGame);
         }
     }
 
     public void Step(TSudokuGameType sudokuGame, Int32 idx, Int32 num)
     {
-        foreach (var requirement in Requirements)
+        // foreach (var requirement in Requirements)
+        // {
+        //     // requirement.Step.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num });
+        //     requirement.StepDelegate.DynamicInvoke(sudokuGame, idx, num);
+        // }
+        foreach (var requirement in Requirements2)
         {
             // requirement.Step.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination, num });
-            requirement.StepDelegate.DynamicInvoke(sudokuGame, idx, num);
+            requirement.Step(sudokuGame, idx, num);
         }
     }
 
     public void RollBack(TSudokuGameType sudokuGame, Int32 idx)
     {
-        foreach (var requirement in Requirements)
+        // foreach (var requirement in Requirements)
+        // {
+        //     // requirement.Rollback.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination });
+        //     requirement.RollBackDelegate.DynamicInvoke(sudokuGame, idx);
+        // }
+        foreach (var requirement in Requirements2)
         {
             // requirement.Rollback.Invoke(requirement.Requirement, new Object?[] { sudokuGame, coordination });
-            requirement.RollBackDelegate.DynamicInvoke(sudokuGame, idx);
+            requirement.Rollback(sudokuGame, idx);
         }
     }
 }

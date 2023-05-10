@@ -3,9 +3,9 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.SudokuConsole.Starter;
 
-public interface ISudokuStarter<TSudokuGameType, TCoordinationType>
+public interface ISudokuStarter<out TSudokuGameType, TCoordinationType>
 where TCoordinationType : ICoordination
 where TSudokuGameType : ISudokuGame<TCoordinationType>
 {
-    public ICollection<TSudokuGameType> Run();
+    public TSudokuGameType Run();
 }

@@ -22,7 +22,7 @@ public interface IRequirement<out TConfigType, in TSudokuGameType, in TCoordinat
     {
     }
 
-    public void RollBack(TSudokuGameType sudokuGame, Int32 idx)
+    public void Rollback(TSudokuGameType sudokuGame, Int32 idx)
     {
     }
 }

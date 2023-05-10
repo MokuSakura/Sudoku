@@ -3,16 +3,16 @@ using MokuSakura.Sudoku.Core.Game;
 
 namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
-public class SubGridRequirement : IRequirement<Object, SudokuGame, Coordinate>
+public class SubGridRequirement : AbstractSudokuRequirement<Object>
 {
     protected Boolean[,] Cache { get; set; } = { };
 
-    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public override Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         return !Cache[GetSubGridIdx(sudokuGame,coordination), num];
     }
 
-    public void Init(SudokuGame sudokuGame)
+    public override void Init(SudokuGame sudokuGame)
     {
         Cache = new Boolean[sudokuGame.SubGridNum, sudokuGame.AvailableSet.Max() + 1];
         for (Int32 i = 0; i < sudokuGame.NumToFill; ++i)
@@ -27,12 +27,12 @@ public class SubGridRequirement : IRequirement<Object, SudokuGame, Coordinate>
         }
     }
 
-    public void Step(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public override void Step(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
     {
         Cache[GetSubGridIdx(sudokuGame,coordination), num] = true;
     }
 
-    public void RollBack(SudokuGame sudokuGame, Coordinate coordination)
+    public override void Rollback(SudokuGame sudokuGame, Coordinate coordination)
     {
         Cache[GetSubGridIdx(sudokuGame,coordination), sudokuGame.GetNum(coordination)] = false;
     }
