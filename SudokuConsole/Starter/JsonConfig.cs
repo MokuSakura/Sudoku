@@ -10,7 +10,7 @@ public class JsonConfig
     public Int32 GameBoardSizeY { get; set; } = 9;
     public Int32 SubGridSizeX { get; set; } = 3;
     public Int32 SubGridSizeY { get; set; } = 3;
-    public List<Int32> AvailableSet { get; set; } = new(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+    public HashSet<Int32> AvailableSet { get; set; } = new(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 }
 
 public class RequirementConfig
