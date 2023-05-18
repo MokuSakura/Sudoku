@@ -33,7 +33,8 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
         JsonSerializerSettings settings = new()
         {
             DefaultValueHandling = DefaultValueHandling.Ignore,
-            ConstructorHandling = ConstructorHandling.Default
+            ConstructorHandling = ConstructorHandling.Default,
+            ObjectCreationHandling = ObjectCreationHandling.Replace
         };
         settings.Converters.Add(new CoordinateConverter());
         JsonConfig jsonConfig = JsonConvert.DeserializeObject<JsonConfig>(Json, settings) ?? new JsonConfig();
@@ -66,7 +67,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
         RequirementChain<SudokuGame, Coordinate> requirementChain = new(requirements);
         SudokuSetting setting = new()
         {
-            AvailableSet = jsonConfig.AvailableSet,
+            AvailableSet = new HashSet<Int32>(jsonConfig.AvailableSet),
             GameBoardSizeX = jsonConfig.GameBoardSizeX,
             GameBoardSizeY = jsonConfig.GameBoardSizeY,
             SubGridSizeX = jsonConfig.SubGridSizeX,
