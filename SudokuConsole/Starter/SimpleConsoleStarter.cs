@@ -22,7 +22,6 @@ public class SimpleConsoleStarter : ISudokuStarter<SudokuGame, Coordinate>
             Coordinate coordination = sudokuGame.MapIndexToCoordination(i);
             sudokuGame.SetNum(coordination, scanner.NextInt());
         }
-
         Console.Out.WriteLine("GameBoard: ");
         sudokuGame.PrintGameBoard(Console.Out);
         DfsSolver<SudokuGame, Coordinate> solver = new();
