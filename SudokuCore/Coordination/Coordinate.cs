@@ -7,7 +7,6 @@ namespace MokuSakura.Sudoku.Core.Coordination;
 /// </summary>
 public readonly struct Coordinate : ICoordination
 {
-    
     [JsonConstructor]
     public Coordinate(Int32 x, Int32 y)
     {
@@ -39,12 +38,12 @@ public readonly struct Coordinate : ICoordination
         return $"Coordinate{{X={X}, Y={Y}}}";
     }
 
-    public static bool operator ==(Coordinate left, Coordinate right)
+    public static Boolean operator ==(Coordinate left, Coordinate right)
     {
         return left.Equals(right);
     }
 
-    public static bool operator !=(Coordinate left, Coordinate right)
+    public static Boolean operator !=(Coordinate left, Coordinate right)
     {
         return !(left == right);
     }
