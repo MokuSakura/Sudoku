@@ -4,9 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SudokuWpf"
+        xmlns:controls="clr-namespace:SudokuWpf.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="MainWindow" Height="450" Width="800" FontSize="18">
+    <Window.Style>
+        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"></Style>
+    </Window.Style>
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>This is reserved for menu bar.</TextBlock>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Width="200">
+                <Button>Game1</Button>
+                <Button>Game2</Button>
+                <Button>Game114514</Button>
+            </StackPanel>
+            <controls:GameBoardControl GameBoardSizeX="9" GameBoardSizeY="9">
+            </controls:GameBoardControl>
+        </StackPanel>
+    </StackPanel>
 </Window>
