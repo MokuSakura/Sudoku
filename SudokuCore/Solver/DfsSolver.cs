@@ -15,7 +15,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
         return sudokuGame;
     }
 
-    private Boolean DfsBody(TSudokuGameType sudokuGame, RequirementChain<TSudokuGameType, TCoordinationType> requirement, Int32 n)
+    private bool DfsBody(TSudokuGameType sudokuGame, RequirementChain<TSudokuGameType, TCoordinationType> requirement, int n)
     {
         if (n >= sudokuGame.NumToFill)
         {
@@ -29,7 +29,7 @@ where TSudokuGameType : ISudokuGame<TCoordinationType>
             return DfsBody(sudokuGame, requirement, n + 1);
         }
 
-        foreach (Int32 testNum in sudokuGame.AvailableSet)
+        foreach (int testNum in sudokuGame.AvailableSet)
         {
             if (!requirement.FitRequirement(sudokuGame, coordination, testNum))
             {

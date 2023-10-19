@@ -2,15 +2,15 @@ namespace MokuSakura.Sudoku.Core.Coordination;
 
 public struct Coordinate3D : ICoordination3D
 {
-    public Coordinate3D(Int32 x, Int32 y, Int32 z)
+    public Coordinate3D(int x, int y, int z)
     {
         X = x;
         Y = y;
         Z = z;
     }
 
-    public Int32 X { get; }
-    public Int32 Y { get; }
-    public Int32 Z { get; }
+    public int X { get; }
+    public int Y { get; }
+    public int Z { get; }
     
 }

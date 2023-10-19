@@ -11,7 +11,7 @@ public class FortressRequirement : IRequirement<SudokuGame, Coordinate>, IConfig
 {
     protected HashSet<Coordinate> GreyCoordinates { get; } = new();
 
-    protected static HashSet<Coordinate> GetAdjacentCoordinates(Int32 rowNum, Int32 colNum, Coordinate coordination)
+    protected static HashSet<Coordinate> GetAdjacentCoordinates(int rowNum, int colNum, Coordinate coordination)
     {
         HashSet<Coordinate> res = new();
         if (coordination.X > 0)
@@ -36,9 +36,9 @@ public class FortressRequirement : IRequirement<SudokuGame, Coordinate>, IConfig
 
         return res;
     }
-    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public bool FitRequirement(SudokuGame sudokuGame, Coordinate coordination, int num)
     {
-        Boolean isGrey = GreyCoordinates.Contains(coordination);
+        bool isGrey = GreyCoordinates.Contains(coordination);
         HashSet<Coordinate> adjacentCoordinates = GetAdjacentCoordinates(sudokuGame.RowNum, sudokuGame.ColNum, coordination);
         if (isGrey)
         {
@@ -49,7 +49,7 @@ public class FortressRequirement : IRequirement<SudokuGame, Coordinate>, IConfig
                     continue;
                 }
 
-                Int32 adjNum = sudokuGame.GetNum(adjacentCoordinate);
+                int adjNum = sudokuGame.GetNum(adjacentCoordinate);
                 if (num == 0)
                 {
                     continue;
@@ -71,7 +71,7 @@ public class FortressRequirement : IRequirement<SudokuGame, Coordinate>, IConfig
                 continue;
             }
 
-            Int32 adjNum = sudokuGame.GetNum(adjacentCoordinate);
+            int adjNum = sudokuGame.GetNum(adjacentCoordinate);
             if (adjNum == 0)
             {
                 continue;

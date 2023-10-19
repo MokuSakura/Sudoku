@@ -4,25 +4,25 @@ namespace MokuSakura.SudokuConsole.Exception;
 
 public class NoRequirementFoundException : ApplicationException
 {
-    public NoRequirementFoundException(String requirementName)
+    public NoRequirementFoundException(string requirementName)
     {
         RequirementName = requirementName;
     }
 
-    protected NoRequirementFoundException(SerializationInfo info, StreamingContext context, String requirementName) : base(info, context)
+    protected NoRequirementFoundException(SerializationInfo info, StreamingContext context, string requirementName) : base(info, context)
     {
         RequirementName = requirementName;
     }
 
-    public NoRequirementFoundException(String? message, String requirementName) : base(message)
+    public NoRequirementFoundException(string? message, string requirementName) : base(message)
     {
         RequirementName = requirementName;
     }
 
-    public NoRequirementFoundException(String? message, System.Exception? innerException, String requirementName) : base(message, innerException)
+    public NoRequirementFoundException(string? message, System.Exception? innerException, string requirementName) : base(message, innerException)
     {
         RequirementName = requirementName;
     }
 
-    public String RequirementName { get; init; }
+    public string RequirementName { get; init; }
 }

@@ -10,14 +10,14 @@ namespace MokuSakura.SudokuConsole.Starter;
 
 public class SimpleConsoleStarter : ISudokuStarter<SudokuGame, Coordinate>
 {
-    public String RegisterName => "SimpleConsoleStarter";
+    public string RegisterName => "SimpleConsoleStarter";
 
     public SudokuGame Run()
     {
         SudokuSetting setting = new();
         SudokuGame sudokuGame = new(setting);
         Scanner scanner = new(Console.OpenStandardInput());
-        for (Int32 i = 0; i < sudokuGame.NumToFill; ++i)
+        for (int i = 0; i < sudokuGame.NumToFill; ++i)
         {
             Coordinate coordination = sudokuGame.MapIndexToCoordination(i);
             sudokuGame.SetNum(coordination, scanner.NextInt());

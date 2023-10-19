@@ -8,7 +8,7 @@ public interface IRequirement<in TSudokuGameType, in TCoordinationType>
     where TSudokuGameType : ISudokuGame<TCoordinationType>
     where TCoordinationType : ICoordination
 {
-    public Boolean FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num);
+    public bool FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, int num);
 
     // public void Configure(Object configuration)
     // {
@@ -18,7 +18,7 @@ public interface IRequirement<in TSudokuGameType, in TCoordinationType>
     {
     }
 
-    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
+    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, int num)
     {
     }
 

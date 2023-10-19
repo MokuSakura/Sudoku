@@ -5,24 +5,24 @@ namespace MokuSakura.Sudoku.Core.Requirement;
 
 public class NumRequirementConfig
 {
-    public List<Int32> LeftRows { get; set; } = new();
-    public List<Int32> RightRows { get; set; } = new();
-    public List<Int32> UpCols { get; set; } = new();
-    public List<Int32> DownCols { get; set; } = new();
-    public Int32 SmallNumMax { get; set; } = 4;
+    public List<int> LeftRows { get; set; } = new();
+    public List<int> RightRows { get; set; } = new();
+    public List<int> UpCols { get; set; } = new();
+    public List<int> DownCols { get; set; } = new();
+    public int SmallNumMax { get; set; } = 4;
 }
 
 public abstract class AbstractNumRequirement : IRequirement<SudokuGame, Coordinate>, IConfigurable<NumRequirementConfig>
 {
-    public HashSet<Int32> LeftRows { get; set; } = new();
-    public HashSet<Int32> RightRows { get; set; } = new();
-    public HashSet<Int32> UpCols { get; set; } = new();
-    public HashSet<Int32> DownCols { get; set; } = new();
-    protected Int32 AffectNum { get; set; } = 2;
-    protected Int32 SmallNumMax { get; set; }
-    protected abstract Boolean FitNumRequirement(Int32 num);
+    public HashSet<int> LeftRows { get; set; } = new();
+    public HashSet<int> RightRows { get; set; } = new();
+    public HashSet<int> UpCols { get; set; } = new();
+    public HashSet<int> DownCols { get; set; } = new();
+    protected int AffectNum { get; set; } = 2;
+    protected int SmallNumMax { get; set; }
+    protected abstract bool FitNumRequirement(int num);
 
-    public virtual Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public virtual bool FitRequirement(SudokuGame sudokuGame, Coordinate coordination, int num)
     {
         if (LeftRows.Contains(coordination.X) && coordination.Y < AffectNum 
             || RightRows.Contains(coordination.X) && coordination.Y > sudokuGame.ColNum - AffectNum - 1
@@ -47,7 +47,7 @@ public abstract class AbstractNumRequirement : IRequirement<SudokuGame, Coordina
 
 public class OddNumRequirement : AbstractNumRequirement
 {
-    protected override Boolean FitNumRequirement(Int32 num)
+    protected override bool FitNumRequirement(int num)
     {
         return (num & 1) == 1;
     }
@@ -55,7 +55,7 @@ public class OddNumRequirement : AbstractNumRequirement
 
 public class EvenNumRequirement : AbstractNumRequirement
 {
-    protected override Boolean FitNumRequirement(Int32 num)
+    protected override bool FitNumRequirement(int num)
     {
         return (num & 1) == 0;
     }
@@ -63,7 +63,7 @@ public class EvenNumRequirement : AbstractNumRequirement
 
 public class BigNumRequirement : AbstractNumRequirement
 {
-    protected override Boolean FitNumRequirement(Int32 num)
+    protected override bool FitNumRequirement(int num)
     {
         return num > SmallNumMax;
     }
@@ -71,7 +71,7 @@ public class BigNumRequirement : AbstractNumRequirement
 
 public class SmallNumRequirement : AbstractNumRequirement
 {
-    protected override Boolean FitNumRequirement(Int32 num)
+    protected override bool FitNumRequirement(int num)
     {
         return num <= SmallNumMax;
     }

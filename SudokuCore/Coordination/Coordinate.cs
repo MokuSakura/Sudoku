@@ -8,17 +8,17 @@ namespace MokuSakura.Sudoku.Core.Coordination;
 public readonly struct Coordinate : ICoordination
 {
     [JsonConstructor]
-    public Coordinate(Int32 x, Int32 y)
+    public Coordinate(int x, int y)
     {
         this.X = x;
         this.Y = y;
     }
 
-    public Int32 X { get; }
+    public int X { get; }
 
-    public Int32 Y { get; }
+    public int Y { get; }
 
-    public override Boolean Equals(Object? obj)
+    public override bool Equals(object? obj)
     {
         if (obj is Coordinate other)
         {
@@ -28,22 +28,22 @@ public readonly struct Coordinate : ICoordination
         return false;
     }
 
-    public override Int32 GetHashCode()
+    public override int GetHashCode()
     {
         return Tuple.Create(X, Y).GetHashCode();
     }
 
-    public override String ToString()
+    public override string ToString()
     {
         return $"Coordinate{{X={X}, Y={Y}}}";
     }
 
-    public static Boolean operator ==(Coordinate left, Coordinate right)
+    public static bool operator ==(Coordinate left, Coordinate right)
     {
         return left.Equals(right);
     }
 
-    public static Boolean operator !=(Coordinate left, Coordinate right)
+    public static bool operator !=(Coordinate left, Coordinate right)
     {
         return !(left == right);
     }

@@ -12,9 +12,9 @@ public static class JObjectExtensions
     /// </summary>
     /// <param name="json"></param>
     /// <returns></returns>
-    public static IDictionary<String, Object> ToDictionary(this JObject json)
+    public static IDictionary<string, object> ToDictionary(this JObject json)
     {
-        Dictionary<String, Object>? propertyValuePairs = json.ToObject<Dictionary<String, Object>>();
+        Dictionary<string, object>? propertyValuePairs = json.ToObject<Dictionary<string, object>>();
         if (propertyValuePairs == null)
         {
             throw new ArgumentException($"Cannot convert {json} to Dictionary");
@@ -25,7 +25,7 @@ public static class JObjectExtensions
         return propertyValuePairs;
     }
 
-    private static void ProcessJObjectProperties(IDictionary<String, Object> propertyValuePairs)
+    private static void ProcessJObjectProperties(IDictionary<string, object> propertyValuePairs)
     {
         var objectPropertyNames = (from property in propertyValuePairs
             let propertyName = property.Key
@@ -36,7 +36,7 @@ public static class JObjectExtensions
         objectPropertyNames.ForEach(propertyName => propertyValuePairs[propertyName] = ToDictionary((JObject)propertyValuePairs[propertyName]));
     }
 
-    private static void ProcessJArrayProperties(IDictionary<String, Object> propertyValuePairs)
+    private static void ProcessJArrayProperties(IDictionary<string, object> propertyValuePairs)
     {
         var arrayPropertyNames = (from property in propertyValuePairs
             let propertyName = property.Key
@@ -52,12 +52,12 @@ public static class JObjectExtensions
     /// </summary>
     /// <param name="array"></param>
     /// <returns></returns>
-    public static Object[] ToArray(this JArray array)
+    public static object[] ToArray(this JArray array)
     {
-        return array.ToObject<Object[]>()!.Select(ProcessArrayEntry).ToArray();
+        return array.ToObject<object[]>()!.Select(ProcessArrayEntry).ToArray();
     }
 
-    private static Object ProcessArrayEntry(Object value)
+    private static object ProcessArrayEntry(object value)
     {
         if (value is JObject jObject)
         {

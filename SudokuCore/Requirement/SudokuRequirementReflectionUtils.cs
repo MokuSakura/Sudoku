@@ -7,7 +7,7 @@ namespace MokuSakura.Sudoku.Core.Requirement;
 public class SudokuRequirementReflectionUtils
 {
     private static ILog Log => LogManager.GetLogger(typeof(SudokuRequirementReflectionUtils));
-    public IDictionary<String, RequirementTemplate> RequirementTemplates { get; init; } = new Dictionary<String, RequirementTemplate>();
+    public IDictionary<string, RequirementTemplate> RequirementTemplates { get; init; } = new Dictionary<string, RequirementTemplate>();
     public static SudokuRequirementReflectionUtils Instance { get; } = new();
     
     public static Type[] GetGenericArguments(Type type, Type genericType)
@@ -17,10 +17,10 @@ public class SudokuRequirementReflectionUtils
             .SelectMany(i => i.GetGenericArguments()) //选择所有接口的泛型参数
             .ToArray(); //ToArray
 
-        Boolean IsGenericType(Type type1)
+        bool IsGenericType(Type type1)
             => type1.IsGenericType && type1.GetGenericTypeDefinition() == genericType;
     }
-    public Object? CreateRequirement(String requirementName)
+    public object? CreateRequirement(string requirementName)
     {
         if (RequirementTemplates.TryGetValue(requirementName, out RequirementTemplate requirementTemplate))
         {
@@ -53,7 +53,7 @@ public class SudokuRequirementReflectionUtils
                     continue;
                 }
 
-                Object requirement = constructorInfo.Invoke(Array.Empty<Object>());
+                object requirement = constructorInfo.Invoke(Array.Empty<object>());
                 RequirementTemplates[type.Name] = new RequirementTemplate()
                 {
                     RequirementType = type,
@@ -66,7 +66,7 @@ public class SudokuRequirementReflectionUtils
 
     public struct RequirementTemplate
     {
-        public Object Template { get; set; }
+        public object Template { get; set; }
         public Type RequirementType { get; set; }
         public ConstructorInfo ParameterlessConstructor { get; set; }
     }

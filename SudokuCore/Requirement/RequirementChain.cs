@@ -17,9 +17,9 @@ public class RequirementChain<TSudokuGameType, TCoordinationType>
         Requirements2 = new List<IRequirement<TSudokuGameType, TCoordinationType>>(requirements);
     }
 
-    public Boolean FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
+    public bool FitRequirement(TSudokuGameType sudokuGame, TCoordinationType coordination, int num)
     {
-        Boolean res = true;
+        bool res = true;
 
         foreach (var requirement in Requirements2)
         {
@@ -41,7 +41,7 @@ public class RequirementChain<TSudokuGameType, TCoordinationType>
         }
     }
 
-    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, Int32 num)
+    public void Step(TSudokuGameType sudokuGame, TCoordinationType coordination, int num)
     {
         foreach (var requirement in Requirements2)
         {

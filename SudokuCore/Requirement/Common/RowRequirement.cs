@@ -6,21 +6,21 @@ namespace MokuSakura.Sudoku.Core.Requirement.Common;
 
 public class RowRequirement : IRequirement<SudokuGame, Coordinate>
 {
-    protected Boolean[,] Cache { get; set; } = { };
+    protected bool[,] Cache { get; set; } = { };
 
-    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public bool FitRequirement(SudokuGame sudokuGame, Coordinate coordination, int num)
     {
         return !Cache[coordination.X, num];
     }
 
     public void Init(SudokuGame sudokuGame)
     {
-        Cache = new Boolean[sudokuGame.RowNum, sudokuGame.AvailableSet.Max() + 1];
-        for (Int32 i = 0; i < sudokuGame.NumToFill; ++i)
+        Cache = new bool[sudokuGame.RowNum, sudokuGame.AvailableSet.Max() + 1];
+        for (int i = 0; i < sudokuGame.NumToFill; ++i)
         {
             Coordinate coordination = sudokuGame.MapIndexToCoordination(i);
-            Int32 num = sudokuGame.GetNum(coordination);
-            Int32 rowIdx = coordination.X;
+            int num = sudokuGame.GetNum(coordination);
+            int rowIdx = coordination.X;
             if (num != 0)
             {
                 Cache[rowIdx, num] = true;
@@ -28,7 +28,7 @@ public class RowRequirement : IRequirement<SudokuGame, Coordinate>
         }
     }
 
-    public void Step(SudokuGame sudokuGame, Coordinate coordination, Int32 num)
+    public void Step(SudokuGame sudokuGame, Coordinate coordination, int num)
     {
         Cache[coordination.X, num] = true;
     }

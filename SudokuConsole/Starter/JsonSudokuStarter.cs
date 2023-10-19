@@ -13,22 +13,22 @@ namespace MokuSakura.SudokuConsole.Starter;
 
 public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
 {
-    public IEnumerable<String> RegisterName => new[] { GetType().Name, "J", "j", "json", "JsonStarter" };
+    public IEnumerable<string> RegisterName => new[] { GetType().Name, "J", "j", "json", "JsonStarter" };
     private static ILog Log => LogManager.GetLogger(typeof(JsonSudokuStarter));
-    private String Json { get; }
+    private string Json { get; }
 
 
-    public JsonSudokuStarter(String json)
+    public JsonSudokuStarter(string json)
     {
         this.Json = json;
     }
 
     public SudokuGame Run()
     {
-        return Run(out Int64 _);
+        return Run(out long _);
     }
 
-    public SudokuGame Run(out Int64 solveTime)
+    public SudokuGame Run(out long solveTime)
     {
         JsonSerializerSettings settings = new()
         {
@@ -42,7 +42,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
         SudokuRequirementReflectionUtils requirementReflectionUtils = SudokuRequirementReflectionUtils.Instance;
         foreach (RequirementConfig jsonConfigRequirement in jsonConfig.Requirements)
         {
-            Object? requirement = requirementReflectionUtils.CreateRequirement(jsonConfigRequirement.RequirementName);
+            object? requirement = requirementReflectionUtils.CreateRequirement(jsonConfigRequirement.RequirementName);
             if (requirement == null)
             {
                 Log.Error($"Cannot find requirement {jsonConfigRequirement.RequirementName}");
@@ -55,7 +55,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
             if (configurableInterface != null)
             {
                 Type configType = SudokuRequirementReflectionUtils.GetGenericArguments(requirementType, typeof(IConfigurable<>))[0];
-                Object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType, settings)!;
+                object config = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(jsonConfigRequirement.Configuration), configType, settings)!;
                 MethodInfo configureMethodInfo = configurableInterface.GetMethod("Configure")!;
                 configureMethodInfo.Invoke(requirement, new[] { config });
             }
@@ -67,7 +67,7 @@ public class JsonSudokuStarter : ISudokuStarter<SudokuGame, Coordinate>
         RequirementChain<SudokuGame, Coordinate> requirementChain = new(requirements);
         SudokuSetting setting = new()
         {
-            AvailableSet = new HashSet<Int32>(jsonConfig.AvailableSet),
+            AvailableSet = new HashSet<int>(jsonConfig.AvailableSet),
             GameBoardSizeX = jsonConfig.GameBoardSizeX,
             GameBoardSizeY = jsonConfig.GameBoardSizeY,
             SubGridSizeX = jsonConfig.SubGridSizeX,

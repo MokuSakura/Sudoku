@@ -9,7 +9,7 @@ public class ArrowRequirement : IRequirement<SudokuGame, Coordinate>, IConfigura
     protected Dictionary<Coordinate, ArrowCache> TargetToArrowDict { get; } = new();
     protected Dictionary<Coordinate, ArrowCache> PathToArrowDict { get; } = new();
 
-    public Boolean FitRequirement(SudokuGame sudokuGame, Coordinate coordinate, Int32 num)
+    public bool FitRequirement(SudokuGame sudokuGame, Coordinate coordinate, int num)
     {
         if (TargetToArrowDict.TryGetValue(coordinate, out ArrowCache? arrow))
         {
@@ -23,7 +23,7 @@ public class ArrowRequirement : IRequirement<SudokuGame, Coordinate>, IConfigura
 
         if (PathToArrowDict.TryGetValue(coordinate, out arrow))
         {
-            Int32 sumTargetValue = sudokuGame.GetNum(arrow.SumTarget);
+            int sumTargetValue = sudokuGame.GetNum(arrow.SumTarget);
             if (sumTargetValue == 0)
             {
                 return arrow.CurrentSum + num < 10;
@@ -61,7 +61,7 @@ public class ArrowRequirement : IRequirement<SudokuGame, Coordinate>, IConfigura
         }
     }
 
-    public void Step(SudokuGame sudokuGame, Coordinate coordinate, Int32 num)
+    public void Step(SudokuGame sudokuGame, Coordinate coordinate, int num)
     {
         if (!PathToArrowDict.TryGetValue(coordinate, out ArrowCache? arrow))
         {
@@ -99,6 +99,6 @@ public class ArrowCache
 {
     public Coordinate SumTarget { get; set; }
     public List<Coordinate> SumPath { get; set; } = new();
-    public Int32 CurrentSum { get; set; }
-    public Int32 RemainToAdd { get; set; }
+    public int CurrentSum { get; set; }
+    public int RemainToAdd { get; set; }
 }

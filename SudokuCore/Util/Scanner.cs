@@ -4,9 +4,9 @@ namespace MokuSakura.Sudoku.Core.Util;
 
 public class Scanner : StreamReader
 {
-    private String currentWord = "";
-    private Boolean end;
-    private Boolean skipped = false;
+    private string currentWord = "";
+    private bool end;
+    private bool skipped = false;
     public Scanner(Stream source) : base(source)
     {
     }
@@ -16,16 +16,16 @@ public class Scanner : StreamReader
         StringBuilder sb = new();
         do
         {
-            Int32 next = this.Read();
+            int next = this.Read();
             if (next < 0)
                 break;
-            Char nextChar = (Char)next;
+            char nextChar = (char)next;
             if (Char.IsWhiteSpace(nextChar))
                 break;
             sb.Append(nextChar);
         } while (true);
 
-        while ((this.Peek() >= 0) && (Char.IsWhiteSpace((Char)this.Peek())))
+        while ((this.Peek() >= 0) && (Char.IsWhiteSpace((char)this.Peek())))
             this.Read();
         if (sb.Length > 0)
             currentWord = sb.ToString();
@@ -34,7 +34,7 @@ public class Scanner : StreamReader
     }
     
 
-    public Int32 NextInt()
+    public int NextInt()
     {
         if (!skipped)
         {
@@ -52,7 +52,7 @@ public class Scanner : StreamReader
         }
     }
 
-    public Double NextDouble()
+    public double NextDouble()
     {
         if (!skipped)
         {
@@ -61,7 +61,7 @@ public class Scanner : StreamReader
         return Double.Parse(currentWord);
     }
 
-    public Boolean HasNext()
+    public bool HasNext()
     {
         ReadNextWord();
         skipped = true;

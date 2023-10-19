@@ -28,7 +28,7 @@ namespace SudokuWpf
             InitializeComponent();
         }
 
-        private void ButtonBase_OnClick(Object sender, RoutedEventArgs e)
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBoxResult messageBoxResult = MessageBox.Show(this, "On Click","Title", MessageBoxButton.YesNo);
             // Console.WriteLine(messageBoxResult);

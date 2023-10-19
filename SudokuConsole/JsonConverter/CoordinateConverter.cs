@@ -16,16 +16,16 @@ public class CoordinateConverter : JsonConverter<Coordinate>
         writer.WriteEndArray();
     }
 
-    public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, Boolean hasExistingValue, JsonSerializer serializer)
+    public override Coordinate ReadJson(JsonReader reader, Type objectType, Coordinate existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         switch (reader.TokenType)
         {
             case JsonToken.StartArray:
             {
                 // reader.Read();
-                Int32 beginDepth = reader.Depth + 1;
-                Int32 x = reader.ReadAsInt32()!.Value;
-                Int32 y = reader.ReadAsInt32()!.Value;
+                int beginDepth = reader.Depth + 1;
+                int x = reader.ReadAsInt32()!.Value;
+                int y = reader.ReadAsInt32()!.Value;
                 while (reader.Depth >= beginDepth && reader.Read())
                 {
                 }
@@ -34,15 +34,15 @@ public class CoordinateConverter : JsonConverter<Coordinate>
             }
             case JsonToken.StartObject:
             {
-                Int32 x = 0;
-                Int32 y = 0;
-                Boolean xRead = false;
-                Boolean yRead = false;
-                Int32 beginDepth = reader.Depth + 1;
+                int x = 0;
+                int y = 0;
+                bool xRead = false;
+                bool yRead = false;
+                int beginDepth = reader.Depth + 1;
                 while (!(xRead && yRead))
                 {
                     reader.Read();
-                    String propertyName = reader.Value!.ToString()!;
+                    string propertyName = reader.Value!.ToString()!;
 
                     if (String.Equals(propertyName, "X", StringComparison.OrdinalIgnoreCase))
                     {
@@ -68,7 +68,7 @@ public class CoordinateConverter : JsonConverter<Coordinate>
         }
     }
 
-    private static void SkipDepth(JsonReader reader, Int32 depth)
+    private static void SkipDepth(JsonReader reader, int depth)
     {
         while (reader.Depth >= depth && reader.Read())
         {

@@ -22,10 +22,10 @@ namespace SudokuWpf
 #endif
         }
 #if DEBUG
-        private const Int32 ATTACH_PARENT_PROCESS = -1;
+        private const int ATTACH_PARENT_PROCESS = -1;
 
         [DllImport("kernel32.dll")]
-        private static extern Boolean AttachConsole(Int32 dwProcessId);
+        private static extern bool AttachConsole(int dwProcessId);
 
         /// <summary>
         ///     Redirects the console output of the current process to the parent process.

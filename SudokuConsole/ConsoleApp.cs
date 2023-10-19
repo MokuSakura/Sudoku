@@ -9,24 +9,24 @@ public sealed class ConsoleApp
 {
     private static ILog Log => LogManager.GetLogger(typeof(ConsoleApp));
 
-    private static IDictionary<String, Action> NamedActions => new Dictionary<String, Action>
+    private static IDictionary<string, Action> NamedActions => new Dictionary<string, Action>
     {
         { "json", RunJson },
     };
 
-    public static void Main(String[] args)
+    public static void Main(string[] args)
     {
         SudokuRequirementReflectionUtils sudokuRequirementReflectionUtils = SudokuRequirementReflectionUtils.Instance;
 
         Log.Debug("Requirements info: ");
-        foreach ((String key, SudokuRequirementReflectionUtils.RequirementTemplate requirementTemplate) in
+        foreach ((string key, SudokuRequirementReflectionUtils.RequirementTemplate requirementTemplate) in
                  sudokuRequirementReflectionUtils.RequirementTemplates)
         {
             Log.Debug($"{key}: {requirementTemplate.RequirementType.FullName}");
         }
 
         Console.WriteLine("Input starter to use.");
-        String starterName = Console.ReadLine() ?? "";
+        string starterName = Console.ReadLine() ?? "";
 
         if (NamedActions.TryGetValue(starterName, out Action? value))
         {
@@ -41,7 +41,7 @@ public sealed class ConsoleApp
     private static void RunJson()
     {
         Log.Info("Input json file");
-        String path = Console.ReadLine() ?? "";
+        string path = Console.ReadLine() ?? "";
         path = path.Trim('\"');
         if (!File.Exists(path))
         {
@@ -49,14 +49,14 @@ public sealed class ConsoleApp
             return;
         }
 
-        String json;
+        string json;
         {
             using FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             TextReader textReader = new StreamReader(fileStream);
             json = textReader.ReadToEnd();
         }
         JsonSudokuStarter starter = new(json);
-        SudokuGame sudokuGame = starter.Run(out Int64 solveTime);
+        SudokuGame sudokuGame = starter.Run(out long solveTime);
         sudokuGame.PrintGameBoard(Console.Out);
         Console.WriteLine($"Time used {solveTime}ms");
     }

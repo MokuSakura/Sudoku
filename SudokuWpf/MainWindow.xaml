@@ -20,8 +20,8 @@
                 <Button>Game2</Button>
                 <Button>Game114514</Button>
             </StackPanel>
-            <controls:GameBoardControl GameBoardSizeX="9" GameBoardSizeY="9">
-            </controls:GameBoardControl>
+            <controls:GameBoardView GameBoardSizeX="3" GameBoardSizeY="3">
+            </controls:GameBoardView>
         </StackPanel>
     </StackPanel>
 </Window>
