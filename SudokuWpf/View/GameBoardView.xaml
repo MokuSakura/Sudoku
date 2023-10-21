@@ -7,7 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel Orientation="Vertical">
         <Grid Name="GameBoardGrid">
-
+            
         </Grid>
     </StackPanel>
 </UserControl>

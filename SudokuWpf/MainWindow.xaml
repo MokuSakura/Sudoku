@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SudokuWpf"
-        xmlns:controls="clr-namespace:SudokuWpf.Controls"
+        xmlns:view="clr-namespace:SudokuWpf.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" FontSize="18">
     <Window.Style>
@@ -20,8 +19,8 @@
                 <Button>Game2</Button>
                 <Button>Game114514</Button>
             </StackPanel>
-            <controls:GameBoardView GameBoardSizeX="3" GameBoardSizeY="3">
-            </controls:GameBoardView>
+            <view:GameBoardView GameBoardSizeX="9" GameBoardSizeY="9">
+            </view:GameBoardView>
         </StackPanel>
     </StackPanel>
 </Window>

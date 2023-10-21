@@ -4,5 +4,11 @@ namespace SudokuWpf.ViewModel;
 
 public class GameBoardViewModel
 {
-    public int[,]? GameBoard { get; set; }
+    public GameBoardViewModel(int[] gameBoard)
+    {
+        GameBoard = gameBoard;
+    }
+
+    public int[] GameBoard { get; set; }
+    
 }

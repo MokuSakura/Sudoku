@@ -1,0 +1,35 @@
+<UserControl x:Class="SudokuWpf.View.GameBoardCellView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviors="clr-namespace:SudokuWpf.Behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="50" d:DesignWidth="50" DataContext="this">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Name="LeftTopCorner" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <Button Grid.Row="0" Grid.Column="1" Name="TopEdge" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <Button Grid.Row="0" Grid.Column="2" Name="RightTopCorner" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <Button Grid.Row="1" Grid.Column="0" Name="LeftEdge" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <TextBox Grid.Row="1" Grid.Column="1" Name="TextBox" Text="{Binding NumberValue}" PreviewMouseDown="TextBoxPreviewMouseDown">
+            <b:Interaction.Behaviors>
+                <behaviors:TextBoxIntegerOnly />
+            </b:Interaction.Behaviors>
+        </TextBox>
+        <Button Grid.Row="1" Grid.Column="2" Name="RightEdge" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <Button Grid.Row="2" Grid.Column="0" Name="LeftBottomCorner" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <Button Grid.Row="2" Grid.Column="1" Name="BottomEdge" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
+        <Button Grid.Row="2" Grid.Column="2" Name="RightBottomCorner" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"> </Button>
+    </Grid>
+</UserControl>
