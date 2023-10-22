@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Orientation="Vertical">
-        <Grid Name="GameBoardGrid">
-            
-        </Grid>
-    </StackPanel>
+             d:DesignHeight="300" d:DesignWidth="300" DataContext="this">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="TabForward" Executed="CommandBinding_OnExecuted"></CommandBinding>
+    </UserControl.CommandBindings>
+    <Grid Name="GameBoardGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+    </Grid>
 </UserControl>

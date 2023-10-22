@@ -5,22 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:SudokuWpf.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" FontSize="18">
-    <Window.Style>
-        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"></Style>
-    </Window.Style>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal">
-            <TextBlock>This is reserved for menu bar.</TextBlock>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Vertical" Width="200">
-                <Button>Game1</Button>
-                <Button>Game2</Button>
-                <Button>Game114514</Button>
-            </StackPanel>
-            <view:GameBoardView GameBoardSizeX="9" GameBoardSizeY="9">
-            </view:GameBoardView>
-        </StackPanel>
-    </StackPanel>
+        Title="MainWindow" Height="600" Width="1200">
+    <!-- <Window.Style> -->
+    <!--     <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"></Style> -->
+    <!-- </Window.Style> -->
+    <TabControl>
+        <TabItem Header="Tab1">
+            <view:SimpleGameView></view:SimpleGameView>
+        </TabItem>
+        <TabItem Header="Tab2"></TabItem>
+    </TabControl>
+    <!-- <StackPanel Orientation="Vertical"> -->
+    <!--     <StackPanel Orientation="Horizontal"> -->
+    <!--         <TextBlock>This is reserved for menu bar.</TextBlock> -->
+    <!--     </StackPanel> -->
+    <!--     <StackPanel Orientation="Horizontal"> -->
+    <!--         <StackPanel Orientation="Vertical" Width="200"> -->
+    <!--             <Button>Game1</Button> -->
+    <!--             <Button>Game2</Button> -->
+    <!--             <Button>Game114514</Button> -->
+    <!--         </StackPanel> -->
+    <!--         <view:GameBoardView GameBoardSizeX="9" GameBoardSizeY="9"> -->
+    <!--         </view:GameBoardView> -->
+    <!--     </StackPanel> -->
+    <!-- </StackPanel> -->
 </Window>

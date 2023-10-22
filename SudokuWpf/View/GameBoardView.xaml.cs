@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using log4net;
-using Microsoft.Xaml.Behaviors;
 using MokuSakura.Sudoku.Core.Coordination;
-using SudokuWpf.Behaviors;
-using SudokuWpf.ViewModel;
-using Brushes = System.Windows.Media.Brushes;
+using SudokuWpf.Converters;
 
 namespace SudokuWpf.View;
 
@@ -22,7 +20,7 @@ public partial class GameBoardView : UserControl
         get
         {
             int[,] res = new int[GameBoardSizeX, GameBoardSizeY];
-            int[] board = ((GameBoardViewModel)DataContext).GameBoard;
+            int[] board = GameBoard1D;
             for (int i = 0; i < board.Length; ++i)
             {
                 int row = i / GameBoardSizeY;
@@ -32,44 +30,133 @@ public partial class GameBoardView : UserControl
 
             return res;
         }
+        set
+        {
+            GameBoardSizeX = value.GetLength(0);
+            GameBoardSizeY = value.GetLength(1);
+            int[] board = new int[GameBoardSizeX * GameBoardSizeY];
+
+            for (int i = 0; i < GameBoardSizeX; ++i)
+            {
+                for (int j = 0; j < GameBoardSizeY; ++j)
+                {
+                    board[j + i * GameBoardSizeY] = value[i, j];
+                }
+            }
+
+            GameBoard1D = board;
+        }
     }
 
+    public static readonly DependencyProperty GameBoard1DProperty = DependencyProperty.Register(
+        "GameBoard1D", typeof(int[]), typeof(GameBoardView), new PropertyMetadata(default(int[])));
+
+    private int[] GameBoard1D
+    {
+        get => (int[])GetValue(GameBoard1DProperty);
+        set => SetValue(GameBoard1DProperty, value);
+    }
     public int GridSize { get; set; } = 40;
-    public bool IsReadOnly { get; init; } = false;
-    public int GameBoardSizeX { get; set; } = 9;
 
-    public int GameBoardSizeY { get; set; } = 9;
+    public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
+        "IsReadOnly", typeof(bool), typeof(GameBoardView), new PropertyMetadata(default(bool)));
 
-    private int SubGridSizeX { get; set; } = 3;
+    public bool IsReadOnly
+    {
+        get => (bool)GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
+    }
 
-    private int SubGridSizeY { get; set; } = 3;
+    public static readonly DependencyProperty GameBoardSizeXProperty = DependencyProperty.Register(
+        "GameBoardSizeX", typeof(int), typeof(GameBoardView), new PropertyMetadata(9, GameBoardSizeChanged));
+
+    public int GameBoardSizeX
+    {
+        get => (int)GetValue(GameBoardSizeXProperty);
+        set => SetValue(GameBoardSizeXProperty, value);
+    }
+
+    public static readonly DependencyProperty GameBoardSizeYProperty = DependencyProperty.Register(
+        "GameBoardSizeY", typeof(int), typeof(GameBoardView), new PropertyMetadata(9, GameBoardSizeChanged));
+
+    public int GameBoardSizeY
+    {
+        get => (int)GetValue(GameBoardSizeYProperty);
+        set => SetValue(GameBoardSizeYProperty, value);
+    }
+
+    public static readonly DependencyProperty SubGridSizeXProperty = DependencyProperty.Register(
+        "SubGridSizeX", typeof(int), typeof(GameBoardView), new PropertyMetadata(3, GameBoardSizeChanged));
+
+    public int SubGridSizeX
+    {
+        get => (int)GetValue(SubGridSizeXProperty);
+        set => SetValue(SubGridSizeXProperty, value);
+    }
+
+    public static readonly DependencyProperty SubGridSizeYProperty = DependencyProperty.Register(
+        "SubGridSizeY", typeof(int), typeof(GameBoardView), new PropertyMetadata(3, GameBoardSizeChanged));
+
+    private static void GameBoardSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        (d as GameBoardView)?.RebuildGameBoard();
+    }
+
+    public int SubGridSizeY
+    {
+        get => (int)GetValue(SubGridSizeYProperty);
+        set => SetValue(SubGridSizeYProperty, value);
+    }
+
     private Dictionary<GameBoardCellView, Coordinate> CellToCoordinate { get; } = new();
+    private Dictionary<Coordinate, GameBoardCellView> CoordinateToCell { get; } = new();
+    private Dictionary<TextBox, GameBoardCellView> TextBoxToCell { get; } = new();
 
     public GameBoardView()
     {
         InitializeComponent();
-    }
-
-    public override void EndInit()
-    {
-        base.EndInit();
         RebuildGameBoard();
     }
 
-    protected void RebuildGameBoard()
+    public void FocusNext(GameBoardCellView gameBoardCellView)
+    {
+        Coordinate coordinateFromCell = GetCoordinateFromCell(gameBoardCellView);
+        int x, y;
+        if (coordinateFromCell.Y == GameBoardSizeY - 1)
+        {
+            x = coordinateFromCell.X + 1;
+            y = 0;
+            if (x == GameBoardSizeX)
+            {
+                return;
+            }
+        }
+        else
+        {
+            x = coordinateFromCell.X;
+            y = coordinateFromCell.Y + 1;
+        }
+
+        GameBoardCellView cellToFocus = CoordinateToCell[new Coordinate(x, y)];
+        cellToFocus.TextBox.Focus();
+    }
+
+    public void RebuildGameBoard()
     {
         GameBoardGrid.ColumnDefinitions.Clear();
         GameBoardGrid.RowDefinitions.Clear();
         CellToCoordinate.Clear();
         GameBoardGrid.Children.Clear();
-        DataContext = new GameBoardViewModel(new int[GameBoardSizeX * GameBoardSizeY]);
-        for (int i = 0; i < GameBoardSizeX; ++i)
+
+        DataContext = this;
+        GameBoard = new int[GameBoardSizeX, GameBoardSizeY];
+        for (int i = 0; i < GameBoardSizeY; ++i)
         {
             ColumnDefinition columnDefinition = new() { Width = new GridLength(GridSize, GridUnitType.Pixel) };
             GameBoardGrid.ColumnDefinitions.Add(columnDefinition);
         }
 
-        for (int i = 0; i < GameBoardSizeY; ++i)
+        for (int i = 0; i < GameBoardSizeX; ++i)
         {
             RowDefinition rowDefinition = new() { Height = new GridLength(GridSize, GridUnitType.Pixel) };
             GameBoardGrid.RowDefinitions.Add(rowDefinition);
@@ -83,18 +170,24 @@ public partial class GameBoardView : UserControl
                 gameBoardCellView.SetBorderThickness(GetBoardDirectionAndThickness(i, j));
                 gameBoardCellView.BorderClick += GameBoardCellViewOnBorderClick;
                 gameBoardCellView.GridClick += GameBoardCellViewOnGridClick;
+                gameBoardCellView.SetBinding(GameBoardCellView.IsReadOnlyProperty, new Binding("IsReadOnly") { Source = this, Mode = BindingMode.OneWay });
                 int idx = i * GameBoardSizeY + j;
-                Binding binding = new($"GameBoard[{idx}]")
+                Binding binding = new($"GameBoard1D[{idx}]")
                 {
-                    Source = DataContext
+                    Source = DataContext,
+                    Mode = BindingMode.TwoWay,
+                    Converter = new ZeroValueConverter()
                 };
-                gameBoardCellView.SetBinding(GameBoardCellView.NumberValueProperty, binding);
+                gameBoardCellView.TextBox.SetBinding(TextBox.TextProperty, binding);
 
                 GameBoardGrid.Children.Add(gameBoardCellView);
                 Grid.SetRow(gameBoardCellView, i);
                 Grid.SetColumn(gameBoardCellView, j);
 
-                CellToCoordinate.Add(gameBoardCellView, new Coordinate(i, j));
+                Coordinate coordinate = new(i, j);
+                CellToCoordinate.Add(gameBoardCellView, coordinate);
+                TextBoxToCell.Add(gameBoardCellView.TextBox, gameBoardCellView);
+                CoordinateToCell.Add(coordinate, gameBoardCellView);
             }
         }
     }
@@ -133,13 +226,16 @@ public partial class GameBoardView : UserControl
         }
 
         return new Thickness(left, top, right, bottom);
-        // return new Thickness(
-        //     j % SubGridSizeY == 0 ? 4 : 1,
-        //     i % SubGridSizeX == 0 ? 4 : 1,
-        //     j % SubGridSizeY == SubGridSizeY - 1 ? 3 : 1,
-        //     i % SubGridSizeX == SubGridSizeX - 1 ? 3 : 1
-        // );
     }
 
     protected Coordinate GetCoordinateFromCell(GameBoardCellView sender) => CellToCoordinate[sender];
+
+    private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        IInputElement focusedElement = Keyboard.FocusedElement;
+        if (focusedElement is TextBox textBox && TextBoxToCell.TryGetValue(textBox, out GameBoardCellView? cellView))
+        {
+            FocusNext(cellView);
+        }
+    }
 }

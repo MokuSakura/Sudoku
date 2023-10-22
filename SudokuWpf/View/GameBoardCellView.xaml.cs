@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using MokuSakura.Sudoku.Core.Coordination;
 
 namespace SudokuWpf.View;
 
@@ -15,13 +15,13 @@ public partial class GameBoardCellView : UserControl
     public event RoutedEventHandler? GridClick;
     private Dictionary<object, Direction> SenderToDirection { get; } = new();
 
-    public static readonly DependencyProperty NumberValueProperty = DependencyProperty.Register(
-        "NumberValue", typeof(int), typeof(GameBoardCellView), new PropertyMetadata(default(int)));
+    public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
+        "IsReadOnly", typeof(bool), typeof(GameBoardCellView), new PropertyMetadata(default(bool)));
 
-    public int NumberValue
+    public bool IsReadOnly
     {
-        get => (int)GetValue(NumberValueProperty);
-        set => SetValue(NumberValueProperty, value);
+        get => (bool)GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
     }
 
     public GameBoardCellView()
@@ -36,6 +36,7 @@ public partial class GameBoardCellView : UserControl
         SenderToDirection.Add(RightBottomCorner, Direction.RightDown);
         SenderToDirection.Add(BottomEdge, Direction.Down);
         SenderToDirection.Add(LeftBottomCorner, Direction.LeftDown);
+        TextBox.SetBinding(TextBoxBase.IsReadOnlyProperty, new Binding("IsReadOnly") { Source = this, Mode = BindingMode.OneWay});
     }
 
     public void SetBorderThickness(Thickness thickness)
@@ -48,35 +49,6 @@ public partial class GameBoardCellView : UserControl
         RightBottomCorner.BorderThickness = new Thickness(0, 0, thickness.Right, thickness.Bottom);
         BottomEdge.BorderThickness = new Thickness(0, 0, 0, thickness.Bottom);
         LeftBottomCorner.BorderThickness = new Thickness(thickness.Left, 0, 0, thickness.Bottom);
-
-
-        // if (direction.HasFlag(Direction.Left))
-        // {
-        //     LeftEdge.BorderThickness = new Thickness(thickness, 0, 0, 0);
-        //     LeftUpCorner.BorderThickness = new Thickness(thickness, 0, 0, 0);
-        //     LeftButtomCorner.BorderThickness = new Thickness(thickness, 0, 0, 0);
-        // }
-        //
-        // if (direction.HasFlag(Direction.Up))
-        // {
-        //     TopEdge.BorderThickness = new Thickness(0, thickness, 0, 0);
-        //     LeftUpCorner.BorderThickness = new Thickness(0, thickness, 0, 0);
-        //     RightTopCorner.BorderThickness = new Thickness(0, thickness, 0, 0);
-        // }
-        //
-        // if (direction.HasFlag(Direction.Right))
-        // {
-        //     RightEdge.BorderThickness = new Thickness(0, 0, thickness, 0);
-        //     RightTopCorner.BorderThickness = new Thickness(0, 0, thickness, 0);
-        //     RightBottomCorner.BorderThickness = new Thickness(0, 0, thickness, 0);
-        // }
-        //
-        // if (direction.HasFlag(Direction.Down))
-        // {
-        //     BottomEdge.BorderThickness = new Thickness(0, 0, 0, thickness);
-        //     LeftButtomCorner.BorderThickness = new Thickness(0, 0, 0, thickness);
-        //     RightBottomCorner.BorderThickness = new Thickness(0, 0, 0, thickness);
-        // }
     }
 
     private void ButtonOnClick(object sender, RoutedEventArgs e)
@@ -93,5 +65,31 @@ public partial class GameBoardCellView : UserControl
     private void TextBoxPreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         GridClick?.Invoke(this, e);
+    }
+
+    private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+        TextBox textBox = (sender as TextBox)!;
+        // Fixes issue when clicking cut/copy/paste in context menu
+        if (textBox.SelectionLength == 0) 
+            textBox.SelectAll();
+    }
+
+    private void TextBox_LostMouseCapture(object sender, MouseEventArgs e)
+    {
+        TextBox textBox = (sender as TextBox)!;
+        // If user highlights some text, don't override it
+        if (textBox.SelectionLength == 0) 
+            textBox.SelectAll();
+
+        // further clicks will not select all
+        textBox.LostMouseCapture -= TextBox_LostMouseCapture; 
+    }
+
+    private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+        TextBox textBox = (sender as TextBox)!;
+        // once we've left the TextBox, return the select all behavior
+        textBox.LostMouseCapture += TextBox_LostMouseCapture;
     }
 }

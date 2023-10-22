@@ -1,0 +1,28 @@
+<UserControl x:Class="SudokuWpf.View.SimpleGameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SudokuWpf.View"
+             DataContext="this"
+             mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal">
+            <local:GameBoardView x:Name="QuizView" GameBoardSizeX="9" GameBoardSizeY="9"></local:GameBoardView>
+            <StackPanel Orientation="Vertical" Margin="10 0" VerticalAlignment="Center" Width="Auto">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock xml:space="preserve">Time Usage: </TextBlock>
+                    <TextBlock Name="TimeUsageBlock"/>
+                </StackPanel>
+                <TextBlock TextAlignment="Center">---------------------></TextBlock>
+            </StackPanel>
+            <local:GameBoardView x:Name="AnswerView" IsReadOnly="true"></local:GameBoardView>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center">
+            <Button Margin="0 10 " Padding="10 5" Click="OnSolveButtonClick">Solve</Button>
+        </StackPanel>
+            
+        
+    </StackPanel>
+</UserControl>

@@ -22,7 +22,7 @@
         <Button Grid.Row="0" Grid.Column="1" Name="TopEdge" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
         <Button Grid.Row="0" Grid.Column="2" Name="RightTopCorner" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
         <Button Grid.Row="1" Grid.Column="0" Name="LeftEdge" BorderBrush="Black" Background="Transparent" Click="ButtonOnClick"></Button>
-        <TextBox Grid.Row="1" Grid.Column="1" Name="TextBox" Text="{Binding NumberValue}" PreviewMouseDown="TextBoxPreviewMouseDown">
+        <TextBox Grid.Row="1" Grid.Column="1" Name="TextBox" PreviewMouseDown="TextBoxPreviewMouseDown" TextAlignment="Center" VerticalContentAlignment="Center" GotKeyboardFocus="TextBox_GotKeyboardFocus" LostMouseCapture="TextBox_LostMouseCapture" LostKeyboardFocus="TextBox_LostKeyboardFocus">
             <b:Interaction.Behaviors>
                 <behaviors:TextBoxIntegerOnly />
             </b:Interaction.Behaviors>
